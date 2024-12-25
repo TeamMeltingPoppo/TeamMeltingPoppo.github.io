@@ -17,25 +17,31 @@ taxonomies:
 
 menu:
   main:
-    - name: About
+    - name: 最新情報
+      url: "/"
+      weight: 1
+    - name: 団体情報
       url: "about/"
       weight: 2
-    - name: Categories
-      url: "categories/"
+    - name: 班紹介
+      url: "teams/"
       weight: 3
-    - name: Tags
-      url: "tags/"
+    - name: アクセス
+      url: "access/"
       weight: 4
-    - name: Archives
-      url: "archives/"
+    - name: 支援
+      url: "sponsor/"
       weight: 5
+    - name: お問い合わせ
+      url: "links/"
+      weight: 6
 
 params:
   social:
     twitter: "melting_poppo"
     github: "TeamMeltingPoppo"
   description: "SwingBy's blog"
-  footer: "&copy; https://TeamMeltingPoppo.github.io \ 2022 -- {Year}"
+  footer: "&copy; https://TeamMeltingPoppo.github.io \ 2024 -- {Year}"
 
 markup:
   highlight:
