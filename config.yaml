@@ -1,0 +1,50 @@
+baseurl : "https://TeamMeltingPoppo.github.io/"
+languageCode: "ja-jp"
+title: "SwingBy's blog"
+googleAnalytics: ""
+disqusShortname: ""
+ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_cache$"]
+enableEmoji: true
+enableEmojiCDN: true
+enableGitInfo: true
+paginate: 10
+
+taxonomies:
+  category : "categories"
+  tag : "tags"
+  series : "series"
+  archive : "archives"
+
+menu:
+  main:
+    - name: About
+      url: "about/"
+      weight: 2
+    - name: Categories
+      url: "categories/"
+      weight: 3
+    - name: Tags
+      url: "tags/"
+      weight: 4
+    - name: Archives
+      url: "archives/"
+      weight: 5
+
+params:
+  social:
+    twitter: "melting_poppo"
+    github: "TeamMeltingPoppo"
+  description: "SwingBy's blog"
+  footer: "&copy; https://TeamMeltingPoppo.github.io \ 2022 -- {Year}"
+
+markup:
+  highlight:
+    pygmentsCodefences : true
+    style : "monokai"
+  goldmark:
+    renderer:
+      unsafe: true
+
+
+author.name : "SwingBy"
+#author.photo : "img/avatar128x128.jpg" #include this if you would like to show the author photo on the sidebar
