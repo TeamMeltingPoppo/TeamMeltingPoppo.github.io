@@ -1,45 +1,67 @@
 {{- define "main" -}}
 
-<h1>Recent Posts</h1>
+<h1 class="display-1">Swingby</h1>
+<h5>birdman team</h5>
 
-<hr/>
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">OUR MISSION</h5>
+      <h3 class="card-title">人力飛行機の世界記録樹立を目指す。</h3>
+      <p class="card-text">
+        SwingByは、学部3年~修士課程を中心に高校2年生から社会人まで所属する技術系準インカレ人力飛行機サークルです。所属メンバーは仙台から大阪まで。現在は鳥人間コンテスト2025を目標に機体開発中。未経験者含め新メンバー募集中です!入部・見学・支援希望はお問い合わせまで。
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+    <a href="../about" class="btn btn-outline-primary">
+      &raquo; わたしたちについて
+    </a>
+  </div>
+</div>
+
+
+<hr />
 
 {{- $pager := .Paginator }}
 {{range $pager.Pages}}
-  {{partial "excerpt.html" .}}
+{{partial "excerpt.html" .}}
 {{end}}
 {{- if gt $pager.TotalPages 1 }}
-  <div class="pagination mt-4">
+<div class="pagination mt-4">
 
-    <li class="page-item">
+  <li class="page-item">
     {{ if $pager.HasPrev }}
-      <a class="btn btn-outline-primary" href="{{ $pager.Prev.URL }}#pager" aria-label="Previous">
-        &laquo;
-      </a>
+    <a class="btn btn-outline-primary" href="{{ $pager.Prev.URL }}#pager" aria-label="Previous">
+      &laquo;
+    </a>
     {{- else }}
-      <a class="page-link disabled" href="" aria-label="Previous">
-        &laquo;
-      </a>
+    <a class="page-link disabled" href="" aria-label="Previous">
+      &laquo;
+    </a>
     {{- end }}
-    </li>
+  </li>
 
-    {{- range $pager.Pagers }}
-      <li class="page-item">
-        <a href="{{ .URL }}#pager" class="page-link {{ if eq . $pager }} active{{ end }}">{{ .PageNumber }}</a>
-      </li>
-    {{- end }}
-
-    <li class="page-item">
-      {{ if $pager.HasNext }}
-        <a class="page-link" href="{{ $pager.Next.URL }}#pager" aria-label="Next">
-         &raquo;
-        </a>
-      {{- else -}}
-        <a class="page-link disabled" href="" aria-label="Previous">
-          &raquo;
-        </a>
-      {{- end }}
-    </li>
-  </div>
+  {{- range $pager.Pagers }}
+  <li class="page-item">
+    <a href="{{ .URL }}#pager" class="page-link {{ if eq . $pager }} active{{ end }}">{{ .PageNumber }}</a>
+  </li>
   {{- end }}
+
+  <li class="page-item">
+    {{ if $pager.HasNext }}
+    <a class="page-link" href="{{ $pager.Next.URL }}#pager" aria-label="Next">
+      &raquo;
+    </a>
+    {{- else -}}
+    <a class="page-link disabled" href="" aria-label="Previous">
+      &raquo;
+    </a>
+    {{- end }}
+  </li>
+</div>
+{{- end }}
 {{- end -}}
