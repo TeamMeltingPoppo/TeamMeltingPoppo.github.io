@@ -1,0 +1,257 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import Card from "../components/Card.astro";
+import { SITE_TITLE } from "../consts";
+import { type CollectionEntry, getCollection, render } from "astro:content";
+
+const sortedPosts = (await getCollection("blog"))
+	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+	.slice(0, 3);
+---
+<!DOCTYPE html>
+<html lang="ja">
+	<head>
+	    <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <title>人力飛行機チーム Swingby - 新たなる地平へ</title>
+    	<style>
+    	    body {
+    	        font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    	    }
+    	    .hero-bg {
+    	        background-image: url('https://placehold.co/1920x1080/a0c4ff/ffffff?text=美しい空と機体のイメージ'); /* 仮の背景画像 */
+    	        background-size: cover;
+    	        background-position: center;
+    	    }
+    	    .section-title {
+    	        border-bottom: 2px solid #3b82f6; /* Tailwind blue-500 */
+    	        padding-bottom: 0.5rem;
+    	        margin-bottom: 1.5rem;
+    	    }
+    	    /* スムーズスクロール */
+    	    html {
+    	        scroll-behavior: smooth;
+    	    }
+    	</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+		
+        	<section id="home" class="hero-bg text-white min-h-screen flex items-center justify-center">
+        	    <div class="bg-black bg-opacity-90 p-8 md:p-12 rounded-lg text-center">
+        	        <h1 class="text-5xl md:text-7xl font-bold mb-4">新たなる地平へ</h1>
+        	        <p class="text-lg md:text-2xl mb-8 max-w-2xl mx-auto">
+        	            まだ誰も見たことのない景色へ。人類の力だけで、どこまで遠くへ行けるのか。
+        	            学生時代に抱いた夢の続きを、僕たちの手で。
+        	            あらゆる制約から解き放たれた翼は、今、テイクオフの時を待っている。
+        	            Swingbyの挑戦は、始まったばかりだ。
+        	        </p>
+        	        <div class="mt-8">
+        	            <h3 class="text-2xl font-semibold mb-4">お知らせ</h3>
+        	            <ul class="space-y-2">
+        	                <li>2025.XX.XX  初号機「Pilgrim」の駆動系テストを開始しました。</li>
+        	                <li>2025.XX.XX  新メンバーの募集を開始しました！</li>
+        	                <li>2024.09.01  人力飛行機チーム「Swingby」が発足しました。</li>
+        	            </ul>
+        	        </div>
+        	    </div>
+        	</section>
+
+
+        	<section id="about" class="py-12 md:py-20 bg-white">
+        	    <div class="container mx-auto px-6">
+        	        <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 md:mb-16 section-title">私たちについて</h2>
+	
+        	        <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+        	            <div>
+        	                <img src="https://placehold.co/600x400/e2e8f0/333333?text=チーム活動のイメージ写真" alt="チーム活動のイメージ" class="rounded-lg shadow-lg">
+        	            </div>
+        	            <div>
+        	                <h3 class="text-2xl font-semibold mb-4 text-blue-600">Our Vision - 私たちの理念と目標</h3>
+        	                <p class="mb-3"><strong class="font-semibold">なぜ飛ぶのか？</strong><br>「学生チームでやりたかったけど、できなかったこと、そのすべてに挑戦するために。」</p>
+        	                <p class="mb-6 text-gray-700">
+        	                    学生時代、誰もが一度は夢見る大空への挑戦。
+        	                    しかし、時間や知識、様々な制約の中で、実現できなかったアイデアや、追い求めきれなかった理想がありました。
+        	                    あの頃の情熱を胸に、今こそ技術の粋を集め、一切の妥協なく、理想の機体をこの手で作り上げる。
+        	                    それが、私たちSwingbyの原動力です。
+        	                </p>
+        	                <p class="mb-3"><strong class="font-semibold">何を目指しているのか？</strong><br>「人力飛行機による、長距離飛行記録の更新。」</p>
+        	                <p class="text-gray-700">
+        	                    私たちが目指すのは、単に空を飛ぶことではありません。
+        	                    人類が生み出した翼が、どれほど遠くまで到達できるのか、その限界に挑戦します。
+        	                    緻密な計算、革新的な設計、そしてパイロットの極限のパフォーマンスが一つになった時、人力飛行機は新たな地平を切り拓くと、私たちは信じています。
+        	                </p>
+        	            </div>
+        	        </div>
+
+        	        <div class="mt-12 md:mt-16">
+        	            <h3 class="text-2xl font-semibold mb-4 text-blue-600">Our History - チームの沿革</h3>
+        	            <ul class="list-disc list-inside space-y-2 text-gray-700">
+        	                <li><strong>2024年9月1日:</strong> 同じ志を持つメンバーが集い、人力飛行機チーム「Swingby」を創設。</li>
+        	                <li><strong>現在:</strong> 2026年の鳥人間コンテスト出場、そしてその先の長距離飛行記録更新を目指し、初号機の設計・開発を進行中。</li>
+        	            </ul>
+        	            <p class="mt-4 text-gray-700">歴史はまだ始まったばかり。私たちは、あなたと一緒に最初の1ページを刻みたいと願っています。</p>
+        	        </div>
+
+        	        <div class="mt-12 md:mt-16">
+        	            <h3 class="text-2xl font-semibold mb-4 text-blue-600">Our Activity - 活動紹介</h3>
+        	            <p class="text-gray-700">設計、製作、トレーニング…。私たちの活動は多岐にわたります。ここでは、チームの「今」を随時更新していきます。（このセクションは、ブログ形式で活動内容を写真付きで紹介していくと、より魅力が伝わります。）</p>
+        	            </div>
+        	    </div>
+        	</section>
+
+        	<section id="aircraft" class="py-12 md:py-20 bg-gray-50">
+        	    <div class="container mx-auto px-6">
+        	        <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 md:mb-16 section-title">機体紹介 - "Pilgrim"</h2>
+        	        <p class="text-center text-lg text-gray-700 mb-8">私たちの夢と技術の結晶である初号機「Pilgrim」。新たなる地平を目指す「巡礼者」の名を冠したこの機体は、長距離飛行記録の更新という目的地へ、私たちを導いてくれます。</p>
+	
+        	        <div class="text-center mb-8 md:mb-12">
+        	            <img src="https://placehold.co/800x450/d1d5db/333333?text=機体「Pilgrim」の三面図+or+CG" alt="機体 Pilgrim の三面図またはCG" class="mx-auto rounded-lg shadow-lg">
+        	        </div>
+
+        	        <div class="grid md:grid-cols-2 gap-8 md:gap-12">
+        	            <div>
+        	                <h3 class="text-xl font-semibold mb-3 text-blue-600">コンセプト：ショートスパン準高速機</h3>
+        	                <p class="text-gray-700 mb-4">「Pilgrim」は、一般的な長距離機体よりも翼長（スパン）を抑え、比較的高速で飛行する「ショートスパン準高速機」として設計されています。これにより、向かい風などの外乱に対する飛行安定性を高め、パイロットが持てる力を効率よく長距離飛行へと繋げることを目指しています。</p>
+        	                <table class="w-full text-left border-collapse">
+        	                    <thead>
+        	                        <tr>
+        	                            <th class="border-b-2 p-2 bg-gray-200">スペック</th>
+        	                            <th class="border-b-2 p-2 bg-gray-200">値</th>
+        	                        </tr>
+        	                    </thead>
+        	                    <tbody>
+        	                        <tr><td class="border-b p-2">機体名</td><td class="border-b p-2">Pilgrim</td></tr>
+        	                        <tr><td class="border-b p-2">全長</td><td class="border-b p-2">(設計中)</td></tr>
+        	                        <tr><td class="border-b p-2">翼幅 (スパン)</td><td class="border-b p-2">27.5 m</td></tr>
+        	                        <tr><td class="border-b p-2">設計巡航速度</td><td class="border-b p-2">8.35 m/s (30.06 km/h)</td></tr>
+        	                    </tbody>
+        	                </table>
+        	            </div>
+        	            <div>
+        	                <h3 class="text-xl font-semibold mb-3 text-blue-600">技術的特徴：Swingbyだけの独自技術</h3>
+        	                <div class="mb-4">
+        	                    <h4 class="font-semibold text-gray-800">中ペラ駆動レイアウト</h4>
+        	                    <p class="text-gray-700">プロペラを胴体の中腹に配置する、特徴的な「中ペラ駆動」を採用。プロペラが生み出す気流が尾翼に直接当たることを防ぎ、機体の操縦性と安定性を格段に向上させます。パイロット前方の視界が拓けることも、長距離飛行における大きなメリットです。</p>
+        	                </div>
+        	                <div>
+        	                    <h4 class="font-semibold text-gray-800">日本唯一の駆動伝達方式</h4>
+        	                    <p class="text-gray-700">パイロットの力をプロペラに伝える駆動系には、<strong class="text-blue-700">日本で唯一、私たちだけが採用する「シャフト＋タイミングベルトドライブ」方式</strong>を搭載。シャフトドライブの高い剛性と、タイミングベルトドライブの軽量性・確実性を両立させた、Swingby独創のハイブリッドシステムです。この革新的な機構が、人力飛行の常識を超える高効率なエネルギー伝達を実現します。</p>
+        	                </div>
+        	            </div>
+        	        </div>
+        	    </div>
+        	</section>
+
+
+        <section id="blog" class="py-12 md:py-20 bg-white">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 md:mb-16 section-title">活動記録</h2>
+                <p class="text-center text-lg text-gray-700 mb-8">日々の活動やイベント情報、大会結果などを発信していきます。</p>
+                <div class="grid md:grid-cols-3 gap-8">
+					{
+						sortedPosts.map((post) => (
+							<Card title={post.data.title} date={post.data.date} id={post.id} />
+						))
+					}
+                </div>
+                <div class="text-center mt-12">
+                    <a href="/blog" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300">全ての記事を見る</a>
+                </div>
+            </div>
+        </section>
+
+			
+        	<section id="join" class="py-12 md:py-20 bg-blue-600 text-white">
+        	    <div class="container mx-auto px-6 text-center">
+        	        <h2 class="text-3xl md:text-4xl font-bold mb-6">君の情熱が、翼になる。</h2>
+        	        <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto">
+        	            設計図の上の1本の線が、現実の翼になる感動を。
+        	            仲間と汗を流し、ゼロから一つのものを創り上げる達成感を。
+        	            理論が形になり、大空へと飛び立つ瞬間の興奮を。
+        	            Swingbyには、一生モノの経験と仲間が待っている。
+        	        </p>
+        	        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 text-left mb-10">
+        	            <div class="bg-white text-gray-800 p-6 rounded-lg shadow-lg">
+        	                <h4 class="font-bold text-xl mb-2 text-blue-700">設計</h4>
+        	                <p>翼、プロペラ、駆動系、電装など、空力・構造・材料力学の知識を活かし、最強の機体を設計します。</p>
+        	            </div>
+        	            <div class="bg-white text-gray-800 p-6 rounded-lg shadow-lg">
+        	                <h4 class="font-bold text-xl mb-2 text-blue-700">製作</h4>
+        	                <p>設計図を形にする、ものづくりの主役。複合材の成形や精密な加工技術が身につきます。</p>
+        	            </div>
+        	            <div class="bg-white text-gray-800 p-6 rounded-lg shadow-lg">
+        	                <h4 class="font-bold text-xl mb-2 text-blue-700">パイロット</h4>
+        	                <p>チームの想いを一身に背負い、大空へ羽ばたく挑戦者。強靭な肉体と精神力が求められます。</p>
+        	            </div>
+        	            <div class="bg-white text-gray-800 p-6 rounded-lg shadow-lg">
+        	                <h4 class="font-bold text-xl mb-2 text-blue-700">地上支援</h4>
+        	                <p>チームの活動を円滑に進めるための頭脳であり、手足。広報、会計、データ分析など、活躍の場は無限大です。</p>
+        	            </div>
+        	        </div>
+        	        <h3 class="text-2xl font-semibold mb-4">新歓情報</h3>
+        	        <ul class="space-y-1 mb-8">
+        	            <li>第一回説明会: 2025年XX月XX日 XX時〜 @オンライン</li>
+        	            <li>第二回説明会: 2025年XX月XX日 XX時〜 @〇〇キャンパス</li>
+        	        </ul>
+        	        <p class="mb-8">少しでも興味を持った方は、お気軽に「お問い合わせ」からご連絡ください！</p>
+        	        <a href="#contact" class="bg-white hover:bg-gray-200 text-blue-600 font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300">お問い合わせはこちら</a>
+        	    </div>
+        	</section>
+
+	        <section id="sponsorship" class="py-12 md:py-20 bg-gray-50">
+	            <div class="container mx-auto px-6">
+	                <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 md:mb-16 section-title">スポンサー募集</h2>
+	                <p class="text-center text-lg text-gray-700 mb-8 max-w-3xl mx-auto">
+	                    共に「新たなる地平」を目指すパートナーを募集しています。
+	                    私たちの挑戦は、皆様からのご支援なくしては成り立ちません。
+	                    人力飛行機の開発には、CFRP（炭素繊維強化プラスチック）をはじめとする特殊な材料費、加工費、実験設備費など、多額の資金が必要となります。
+	                    Swingbyの翼に、貴社・貴団体のロゴを乗せて、一緒に大空の夢を追いかけませんか。
+	                </p>
+	                <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+	                    <div>
+	                        <h3 class="text-xl font-semibold mb-3 text-blue-600">ご支援のメリット</h3>
+	                        <ul class="list-disc list-inside space-y-2 text-gray-700">
+	                            <li>機体へのロゴステッカーの貼付</li>
+	                            <li>チームウェアへのロゴプリント</li>
+	                            <li>公式ウェブサイト、SNSでのご紹介</li>
+	                            <li>各種メディアで紹介された際の露出</li>
+	                            <li>地域貢献・社会貢献活動としてのアピール</li>
+	                        </ul>
+	                        <p class="mt-6 text-gray-700">皆様のご支援が、私たちの翼となり、推進力となります。</p>
+	                    </div>
+	                    <div>
+	                         <img src="https://placehold.co/600x400/e2e8f0/333333?text=スポンサーメリットのイメージ" alt="スポンサーメリットのイメージ" class="rounded-lg shadow-lg">
+	                         </div>
+	                </div>
+	                 <p class="mt-8 text-center text-gray-700">ご支援に関する詳細やご質問は、下記よりお気軽にお問い合わせください。</p>
+	                <div class="text-center mt-8">
+	                     <a href="#contact" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300">お問い合わせはこちら</a>
+	                </div>
+	            </div>
+	        </section>
+
+	        <section id="contact" class="py-12 md:py-20 bg-white">
+	            <div class="container mx-auto px-6">
+	                <h2 class="text-3xl md:text-4xl font-bold text-center mb-10 md:mb-16 section-title">お問い合わせ</h2>
+	                <p class="text-center text-lg text-gray-700 mb-8">チームへのご質問、見学希望、取材依頼、ご支援に関するご相談など、お気軽にご連絡ください。</p>
+	                <div class="max-w-lg mx-auto bg-gray-50 p-8 rounded-lg shadow-lg">
+	                    <p class="mb-4"><strong>メールアドレス:</strong><br>
+	                        <a href="mailto:melting.poppo@gmail.com" class="text-blue-500 hover:underline">melting.poppo@gmail.com</a>
+	                    </p>
+	                    <p><strong>お問い合わせフォーム:</strong><br>
+	                        <a href="YOUR_GOOGLE_FORM_LINK_HERE" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:underline">Googleフォームでのお問い合わせはこちら</a>
+	                        <span class="text-sm text-gray-500 block">(※Googleフォームのリンクを設定してください)</span>
+	                    </p>
+	                </div>
+	            </div>
+	        </section>
+
+		</main>
+		<Footer />
+	</body>
+</html>

@@ -1,0 +1,55 @@
+---
+import { SITE_TITLE } from "../consts";
+import HeaderLink from "./HeaderLink.astro";
+import logo from "../assets/avatar.jpg";
+---
+
+<script
+  src="https://cdn.jsdelivr.net/npm/@tailwindplus/elements@1"
+  type="module"></script>
+<div class="bg-white shadow-md sticky top-0 z-50">
+  <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+    <a href="#home" class="text-2xl font-bold text-blue-600">Swingby</a>
+
+    <nav class="hidden md:block">
+      <ul class="flex space-x-4 md:space-x-6">
+        <li><HeaderLink href="/#home">ホーム</HeaderLink></li>
+        <li><HeaderLink href="/#about">私たちについて</HeaderLink></li>
+        <li><HeaderLink href="/#aircraft">機体紹介</HeaderLink></li>
+        <li><HeaderLink href="/#blog">活動記録</HeaderLink></li>
+        <li><HeaderLink href="/#join">メンバー募集</HeaderLink></li>
+        <li><HeaderLink href="/#sponsorship">スポンサー募集</HeaderLink></li>
+        <li><HeaderLink href="/#contact">お問い合わせ</HeaderLink></li>
+      </ul>
+    </nav>
+
+    <div class="md:hidden">
+      <button type="button" command="--toggle" commandfor="mobile-menu">
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          ><path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16m-7 6h7"></path></svg
+        >
+      </button>
+    </div>
+  </div>
+
+  <el-disclosure id="mobile-menu" hidden class="block sm:hidden">
+    <div class="space-y-1 px-2 pt-2 pb-3">
+        <HeaderLink href="/#home">ホーム</HeaderLink>
+        <HeaderLink href="/#about">私たちについて</HeaderLink>
+        <HeaderLink href="/#aircraft">機体紹介</HeaderLink>
+        <HeaderLink href="/#blog">活動記録</HeaderLink>
+        <HeaderLink href="/#join">メンバー募集</HeaderLink>
+        <HeaderLink href="/#sponsorship">スポンサー募集</HeaderLink>
+        <HeaderLink href="/#contact">お問い合わせ</HeaderLink>
+    </div>
+  </el-disclosure>
+</div>
