@@ -6,18 +6,24 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "article-gen": "tsx ./cli/article_gen.ts",
+    "article-update": "tsx ./cli/article_update.ts"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.7",
     "@astrojs/rss": "^4.0.12",
     "@astrojs/sitemap": "^3.6.0",
     "@tailwindcss/vite": "^4.1.14",
-    "@tailwindplus/elements": "^1.0.17",
     "astro": "^5.14.3",
+    "astro-expressive-code": "^0.41.3",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
     "sharp": "^0.34.3",
     "tailwindcss": "^4.1.14"
+  },
+  "devDependencies": {
+    "@inquirer/prompts": "^7.9.0",
+    "@types/node": "^24.8.0",
+    "tsx": "^4.20.6"
   }
 }

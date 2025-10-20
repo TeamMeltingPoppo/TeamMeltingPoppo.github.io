@@ -1,14 +1,51 @@
 ---
-import { CollectionEntry } from 'astro:content';
-import FormattedDate from './FormattedDate.astro';
-import '../styles/global.css';
+import FormattedDate from "./FormattedDate.astro";
+import { Image, ImageMetadata } from "astro:assets";
+import "../styles/global.css";
 
-
-type Props = CollectionEntry<'blog'>;
-const {title, date, id} = Astro.props;
+type Props = {
+    title: string;
+    date: Date;
+    updatedDate?: Date;
+    heroImage?: ImageMetadata;
+    id: string;
+    tags?: [string];
+};
+const { title, date, updatedDate, id, tags, heroImage } = Astro.props;
 ---
-<div class="bg-gray-50 p-6 rounded-lg shadow-lg">
-    <FormattedDate date={date} />
-    <h4 class="text-xl font-semibold mb-2 text-blue-600">{title}</h4>
-    <a href={`/blog/${id}`} class="text-blue-500 hover:underline right-0">Read more &rarr;</a>
+
+<div
+    class="block p-6 max-w-full bg-white rounded-lg border border-gray-200 shadow-md"
+>
+    <a href={`/blog/${id}`} class="text-xl font-semibold mb-2 hover:underline">
+        <h5>{title}</h5>
+    </a>
+
+    <div class="flex items-center text-sm text-gray-600">
+        <FormattedDate date={date} />
+        {updatedDate && (
+            <>
+                <span class="mx-2">|</span>
+                <span>Updated: </span>
+                <FormattedDate date={updatedDate} />
+            </>
+        )}
+    </div>
+
+    <div class="flex flex-wrap gap-2 mt-2">
+        {
+            tags?.map((tag) => (
+                <div class="bg-gray-200 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">
+                    #{tag}
+                </div>
+            ))
+        }
+    </div>
+    {heroImage && (
+        <Image
+            src={heroImage}
+            alt={`Hero image for ${title}`}
+            class="mt-4 rounded-lg"
+        />
+    )}
 </div>
