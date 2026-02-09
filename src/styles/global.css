@@ -117,6 +117,23 @@ html.dark .lighticon {
   @apply size-[1em];
 }
 
+
+html .darklogo {
+  @apply size-[0em];
+}
+
+html .lightlogo {
+  @apply  size-auto h-10;
+}
+
+html.dark .darklogo {
+  @apply size-auto h-10;
+}
+
+html.dark .lightlogo {
+  @apply size-[0em];
+}
+
 .katex-display {
 	overflow-x: auto;
 	overflow-y: hidden;

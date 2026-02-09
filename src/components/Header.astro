@@ -3,7 +3,9 @@ import HeaderLink from "./HeaderLink.astro";
 import Icon from "./Icon.astro";
 import ThemeToggle from "./ThemeToggle.astro";
 import Logo from "../assets/logo.png";
+import LogoDark from "../assets/logo-dark.png";
 import { Image } from "astro:assets";
+import "tailwindcss"
 ---
 
 <nav
@@ -16,10 +18,18 @@ import { Image } from "astro:assets";
           <Image
             src={Logo}
             alt="Swingby Logo"
-            class="object-cover h-10 w-auto"
+            class="object-cover w-auto lightlogo"
             format="webp"
             loading="eager"
           />
+          <Image
+            src={LogoDark}
+            alt="Swingby Logo"
+            class="object-cover w-auto darklogo"
+            format="webp"
+            loading="eager"
+          />
+          <span class="font-bold text-xl">Swingby</span>
         </a>
       </div>
 

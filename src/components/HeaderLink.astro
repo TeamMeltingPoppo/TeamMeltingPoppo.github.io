@@ -10,10 +10,6 @@ const subpath = pathname.match(/[^\/]+/g);
 const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
 ---
 
-<a href={href} class={
-	isActive
-		? `block rounded-md px-3 py-3 font-medium hover:bg-primary-hover text-background bg-primary`
-		: `block rounded-md px-3 py-3 font-medium hover:bg-primary-hover hover:text-background`
-	}>
+<a href={href} class=`block rounded-md px-3 py-3 font-medium hover:bg-foreground hover:text-background`>
 	<slot/>
 </a>
