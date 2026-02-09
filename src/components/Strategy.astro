@@ -40,10 +40,10 @@ const { steps } = Astro.props;
                     >
                         <div class={`w-4 h-4 bg-background border-2 border-${step.isCurrent ? "accent" : "foreground"} rounded-full mx-auto shadow-sm`} />
 
-                        <div class="absolute bottom-6 right-0 -translate-x-1/2 whitespace-nowrap font-bold">
+                        <div class="absolute bottom-5 right-5 -translate-x-1/2 whitespace-nowrap font-bold">
                             {step.date}
                         </div>
-                        <div class="absolute top-0 left-0 -translate-x-1 whitespace-pre w-40 font-bold text-sm">
+                        <div class={`absolute top-5 left-5 -translate-x-1 whitespace-pre font-bold text-start text-sm ${step.isCurrent ? "border-accent border-2" : ""}`}>
                             {step.label}
                         </div>
                     </div>
