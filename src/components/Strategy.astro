@@ -1,0 +1,54 @@
+---
+type Props = {
+    steps: {
+        date: string;
+        label: string;
+        x: number;
+        y: number;
+        isCurrent?: boolean;
+    }[];
+};
+
+const { steps } = Astro.props;
+---
+
+<section class="w-full">
+    <div class="mx-auto px-10">
+        <div class="relative h-100">
+            {
+                steps.map((step, index) => {
+                    if (index === steps.length - 1) return null;
+                    const nextStep = steps[index + 1];
+                    return (
+                        <svg class="absolute left-0 top-0 w-full h-full pointer-events-none stroke-foreground/50">
+                            <line
+                                x1={`${step.x}%`}
+                                y1={`${step.y}%`}
+                                x2={`${nextStep.x}%`}
+                                y2={`${nextStep.y}%`}
+                                stroke-width="2"
+                            />
+                        </svg>
+                    );
+                })
+            }
+            {
+                steps.map((step) => (
+                    <div
+                        class={`absolute -translate-x-1/2 -translate-y-1/2 text-center ${step.isCurrent ? "text-accent" : "text-foreground"}  hover:scale-125 transition-transform duration-200`}
+                        style={`left:${step.x}%; top:${step.y}%;`}
+                    >
+                        <div class={`w-4 h-4 bg-background border-2 border-${step.isCurrent ? "accent" : "foreground"} rounded-full mx-auto shadow-sm`} />
+
+                        <div class="absolute bottom-6 right-0 -translate-x-1/2 whitespace-nowrap font-bold">
+                            {step.date}
+                        </div>
+                        <div class="absolute top-0 left-0 -translate-x-1 whitespace-pre w-40 font-bold text-sm">
+                            {step.label}
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>

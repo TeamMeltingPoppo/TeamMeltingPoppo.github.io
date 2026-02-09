@@ -3,7 +3,7 @@
 import {existsSync,mkdirSync,writeFileSync} from "fs";
 import { input, select, confirm} from '@inquirer/prompts';
 
-const rootpath = "./src/content/blog";
+const rootpath = "./content/blog";
 
 async function main() {
     const title = await input({ message: "Title:" });
@@ -37,7 +37,6 @@ async function main() {
 title: ${title}
 description: ${description}
 date: ${date}
-slug: ${slug}
 category: ${category}
 tags: [${tags.split(',').map(tag => tag.trim().toLowerCase()).join(', ')}]
 draft: true

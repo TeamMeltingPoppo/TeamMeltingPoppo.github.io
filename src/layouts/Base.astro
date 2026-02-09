@@ -1,0 +1,37 @@
+---
+import type { CollectionEntry } from "astro:content";
+import type { ImageMetadata } from "astro";
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+
+type Props = {
+	title: string;
+	image?: ImageMetadata;
+	description?: string;
+};
+
+const { title, image, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<BaseHead
+			title={`${title} - ${SITE_TITLE}`}
+			image={image}
+			description={description || SITE_DESCRIPTION}
+		/>
+	</head>
+
+	<body>
+		<Header />
+		<main class="mb-8 max-w-[calc(100%-2em)] w-[960px] mx-auto px-6">
+			<div class="container mx-auto px-6 py-8">
+				<slot />
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>

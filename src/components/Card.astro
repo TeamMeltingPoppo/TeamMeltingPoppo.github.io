@@ -1,6 +1,8 @@
 ---
 import FormattedDate from "./FormattedDate.astro";
-import { Image, ImageMetadata } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import { Image } from "astro:assets";
+import Icon from "./Icon.astro";
 import "../styles/global.css";
 
 type Props = {
@@ -8,44 +10,38 @@ type Props = {
     date: Date;
     updatedDate?: Date;
     heroImage?: ImageMetadata;
-    id: string;
+    slug: string;
     tags?: [string];
 };
-const { title, date, updatedDate, id, tags, heroImage } = Astro.props;
+const { title, date, updatedDate, slug: slug, tags, heroImage } = Astro.props;
 ---
 
-<div
-    class="block p-6 max-w-full bg-white rounded-lg border border-gray-200 shadow-md"
+<a
+    href={`/blog/${slug}`} 
+    class="block p-6 max-w-full rounded-lg border border-primary shadow-md hover:scale-105 transition-transform duration-200"
 >
-    <a href={`/blog/${id}`} class="text-xl font-semibold mb-2 hover:underline">
-        <h5>{title}</h5>
-    </a>
+    <span class="text-xl md:text-2xl lg:text-3xl font-bold my-2">
+        {title}
+    </span>
 
-    <div class="flex items-center text-sm text-gray-600">
+    <div class="block text-lg text-inactive-foreground my-2">
+        <Icon name="calendar" size="1em" />
         <FormattedDate date={date} />
         {updatedDate && (
-            <>
-                <span class="mx-2">|</span>
-                <span>Updated: </span>
-                <FormattedDate date={updatedDate} />
-            </>
+            <span>
+                ( Updated on&nbsp;
+                <FormattedDate date={updatedDate} /> )
+            </span>
         )}
     </div>
 
-    <div class="flex flex-wrap gap-2 mt-2">
+    <div class="flex flex-wrap gap-2 mt-3">
         {
             tags?.map((tag) => (
-                <div class="bg-gray-200 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded">
-                    #{tag}
+                <div class="bg-inactive-background text-inactive-foreground text-md font-semibold mr-2 px-2.5 py-0.5 rounded">
+                    <Icon name="tag" size="1em" />{tag}
                 </div>
             ))
         }
     </div>
-    {heroImage && (
-        <Image
-            src={heroImage}
-            alt={`Hero image for ${title}`}
-            class="mt-4 rounded-lg"
-        />
-    )}
-</div>
+</a>

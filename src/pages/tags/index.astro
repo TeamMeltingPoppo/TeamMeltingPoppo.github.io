@@ -1,6 +1,7 @@
 ---
 import { getCollection } from "astro:content";
-import Layout from "../../layouts/Layout.astro";
+import Layout from "../../layouts/Base.astro";
+import Icon from "../../components/Icon.astro";
 
 const all_posts = await getCollection("blog");
 type FrontmatterPost = (typeof all_posts)[number] & {
@@ -24,16 +25,18 @@ const tags = Array.from(
 
 <Layout title="Tags">
 	<section>
-		<h3 class="text-3xl font-bold mb-12">Tags</h3>
+		<h1 class="text-3xl font-bold mb-12">Tags</h1>
 		<div class="flex flex-wrap gap-2 mt-12">
 			{
 				tags.sort().map((tag) => {
 					return (
 						<a
 							href={`/tags/${tag}`}
-							class="bg-gray-200 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded hover:bg-gray-300"
+							class="bg-inactive-background text-inactive-foreground text-xs font-semibold mr-2 px-2.5 py-0.5 rounded hover:text-white hover:bg-primary hover:scale-105 transition-transform"
 						>
-							<h2>#{tag}</h2>
+							<span class="text-lg font-bold">
+								<Icon name="tag"/>{tag}
+							</span>
 						</a>
 					);
 				})

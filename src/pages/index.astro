@@ -1,78 +1,73 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from "../layouts/Base.astro";
 import Card from "../components/Card.astro";
 import { getCollection } from "astro:content";
+import HistoryImage from "../assets/home/history.png";
+import Strategy from "../components/strategy.astro";
+import Top1 from "../assets/home/top1.png";
+import { Image } from "astro:assets";
 
 const sortedPosts = (await getCollection("blog"))
 	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 	.slice(0, 3);
 ---
 
-<Layout title="Swingby人力飛行機チーム" description="学生人力飛行機チームSwingbyの公式サイトへようこそ。私たちは、長距離飛行記録更新を目指し、革新的な設計と情熱で新たな地平を切り拓きます。">
-	<section
-		id="home"
-		class="hero-bg text-white min-h-screen flex items-center justify-center"
-	>
-		<div class="bg-black bg-opacity-90 p-8 md:p-12 rounded-lg text-center">
-			<h1 class="text-5xl md:text-7xl font-bold mb-4">新たなる地平へ</h1>
-			<p class="text-lg md:text-2xl mb-8 max-w-2xl mx-auto">
-				まだ誰も見たことのない景色へ。人類の力だけで、どこまで遠くへ行けるのか。
-				学生時代に抱いた夢の続きを、僕たちの手で。
-				あらゆる制約から解き放たれた翼は、今、テイクオフの時を待っている。
-				Swingbyの挑戦は、始まったばかりだ。
-			</p>
-			<div class="mt-8">
-				<h3 class="text-2xl font-semibold mb-4">お知らせ</h3>
-				<ul class="space-y-2">
-					<li>
-						2025.XX.XX
-						初号機「Pilgrim」の駆動系テストを開始しました。
-					</li>
-					<li>2025.XX.XX 新メンバーの募集を開始しました！</li>
-					<li>
-						2024.09.01 人力飛行機チーム「Swingby」が発足しました。
-					</li>
-				</ul>
+<Layout
+	title="Swingby人力飛行機チーム"
+	description="学生人力飛行機チームSwingbyの公式サイトへようこそ。私たちは、長距離飛行記録更新を目指し、革新的な設計と情熱で新たな地平を切り拓きます。"
+>
+	<section id="home" class="">
+		<div class="relative w-full h-[600px] md:min-h-screen bg-black/40">
+			<Image
+				src={Top1}
+				alt="トップ画像1"
+				class="w-full h-full object-cover"
+				format="webp"
+				loading="eager"
+			/>
+			<div
+				class="absolute inset-0 flex flex-col items-end justify-center px-12 text-white bg-black/50 text-right"
+			>
+				<h1 class="tracking-tighter">Swingby</h1>
+				<h2 class="border-white inline-block">新たなる地平へ</h2>
+				<div class="space-y-2 text-sm md:text-base">
+					<p>まだ誰も見たことのない景色へ</p>
+					<p>人類の力だけで、どこまで遠くへ行けるのか</p>
+					<p>学生時代に抱いた夢の続きを、僕たちの手で</p>
+					<p>
+						あらゆる制約から解き放たれた翼は、今、テイクオフの時を待っている
+					</p>
+					<p>Swingbyの挑戦は、始まったばかりだ</p>
+				</div>
 			</div>
 		</div>
 	</section>
 
-	<section id="about" class="py-12 md:py-20 bg-white">
+	<section id="about">
 		<div class="container mx-auto px-6">
-			<h2
-				class="text-3xl md:text-4xl font-bold text-center mb-10 md:mb-16 section-title"
-			>
-				私たちについて
-			</h2>
+			<h2>私たちについて</h2>
 
-			<div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+			<div>
 				<div>
-					<img
-						src="https://placehold.co/600x400/e2e8f0/333333?text=チーム活動のイメージ写真"
-						alt="チーム活動のイメージ"
-						class="rounded-lg shadow-lg"
-					/>
-				</div>
-				<div>
-					<h3 class="text-2xl font-semibold mb-4 text-blue-600">
-						Our Vision - 私たちの理念と目標
-					</h3>
-					<p class="mb-3">
-						<strong class="font-semibold">なぜ飛ぶのか？</strong><br
+					<h3>Our Vision - 私たちの理念と目標</h3>
+					<p>
+						<strong class="font-semibold text-primary"
+							>なぜ飛ぶのか？</strong
+						><br
 						/>「学生チームでやりたかったけど、できなかったこと、そのすべてに挑戦するために。」
 					</p>
-					<p class="mb-6 text-gray-700">
+					<p class="mt-3 mb-6">
 						学生時代、誰もが一度は夢見る大空への挑戦。
 						しかし、時間や知識、様々な制約の中で、実現できなかったアイデアや、追い求めきれなかった理想がありました。
 						あの頃の情熱を胸に、今こそ技術の粋を集め、一切の妥協なく、理想の機体をこの手で作り上げる。
 						それが、私たちSwingbyの原動力です。
 					</p>
-					<p class="mb-3">
-						<strong class="font-semibold"
+					<p>
+						<strong class="font-semibold text-primary"
 							>何を目指しているのか？</strong
 						><br />「人力飛行機による、長距離飛行記録の更新。」
 					</p>
-					<p class="text-gray-700">
+					<p class="mt-3 mb-6">
 						私たちが目指すのは、単に空を飛ぶことではありません。
 						人類が生み出した翼が、どれほど遠くまで到達できるのか、その限界に挑戦します。
 						緻密な計算、革新的な設計、そしてパイロットの極限のパフォーマンスが一つになった時、人力飛行機は新たな地平を切り拓くと、私たちは信じています。
@@ -80,11 +75,36 @@ const sortedPosts = (await getCollection("blog"))
 				</div>
 			</div>
 
-			<div class="mt-12 md:mt-16">
-				<h3 class="text-2xl font-semibold mb-4 text-blue-600">
-					Our History - チームの沿革
-				</h3>
-				<ul class="list-disc list-inside space-y-2 text-gray-700">
+			<section>
+				<h3>Our History - チームの沿革</h3>
+
+				<Strategy
+					steps={[
+						{ date: "2024.9.1", label: "チーム設立", x: 10, y: 80 },
+						{
+							date: "現在",
+							label: "現在地",
+							x: 30,
+							y: 65,
+							isCurrent: true,
+						},
+						{
+							date: "2026年",
+							label: "1号機(Pilgrim)にて\n鳥人間コンテスト出場",
+							x: 55,
+							y: 45,
+						},
+						{
+							date: "2030年",
+							label: "2号機にて\n鳥人間コンテスト出場",
+							x: 75,
+							y: 25,
+						},
+						{ date: "20xx年", label: "世界記録更新", x: 90, y: 10 },
+					]}
+				/>
+
+				<ul class="list-disc list-inside space-y-2 py-5">
 					<li>
 						<strong>2024年9月1日:</strong> 同じ志を持つメンバーが集い、人力飛行機チーム「Swingby」を創設。
 					</li>
@@ -92,30 +112,29 @@ const sortedPosts = (await getCollection("blog"))
 						<strong>現在:</strong> 2026年の鳥人間コンテスト出場、そしてその先の長距離飛行記録更新を目指し、初号機の設計・開発を進行中。
 					</li>
 				</ul>
-				<p class="mt-4 text-gray-700">
-					歴史はまだ始まったばかり。私たちは、あなたと一緒に最初の1ページを刻みたいと願っています。
-				</p>
-			</div>
+			</section>
 
-			<div class="mt-12 md:mt-16">
-				<h3 class="text-2xl font-semibold mb-4 text-blue-600">
-					Our Activity - 活動紹介
-				</h3>
-				<p class="text-gray-700">
-					設計、製作、トレーニング…。私たちの活動は多岐にわたります。ここでは、チームの「今」を随時更新していきます。（このセクションは、ブログ形式で活動内容を写真付きで紹介していくと、より魅力が伝わります。）
+			<section class="mt-12 md:mt-16">
+				<h3>Our Activity - 活動紹介</h3>
+				<p>
+					設計、製作、トレーニング…。私たちの活動は多岐にわたります。
 				</p>
-			</div>
+
+				<div class="text-center mt-12">
+					<a
+						href="/activity"
+						class="bg-background text-foreground border-2 font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300 hover:bg-foreground hover:text-background"
+						>詳しくはこちら</a
+					>
+				</div>
+			</section>
 		</div>
 	</section>
 
-	<section id="aircraft" class="py-12 md:py-20 bg-gray-50">
+	<section id="aircraft">
 		<div class="container mx-auto px-6">
-			<h2
-				class="text-3xl md:text-4xl font-bold text-center mb-10 md:mb-16 section-title"
-			>
-				機体紹介 - "Pilgrim"
-			</h2>
-			<p class="text-center text-lg text-gray-700 mb-8">
+			<h2>機体紹介 - "Pilgrim"</h2>
+			<p class="text-center text-lg mb-8">
 				私たちの夢と技術の結晶である初号機「Pilgrim」。新たなる地平を目指す「巡礼者」の名を冠したこの機体は、長距離飛行記録の更新という目的地へ、私たちを導いてくれます。
 			</p>
 
@@ -129,10 +148,8 @@ const sortedPosts = (await getCollection("blog"))
 
 			<div class="grid md:grid-cols-2 gap-8 md:gap-12">
 				<div>
-					<h3 class="text-xl font-semibold mb-3 text-blue-600">
-						コンセプト：ショートスパン準高速機
-					</h3>
-					<p class="text-gray-700 mb-4">
+					<h3>コンセプト：ショートスパン準高速機</h3>
+					<p class="mb-4">
 						「Pilgrim」は、一般的な長距離機体よりも翼長（スパン）を抑え、比較的高速で飛行する「ショートスパン準高速機」として設計されています。これにより、向かい風などの外乱に対する飛行安定性を高め、パイロットが持てる力を効率よく長距離飛行へと繋げることを目指しています。
 					</p>
 					<table class="w-full text-left border-collapse">
@@ -170,24 +187,17 @@ const sortedPosts = (await getCollection("blog"))
 					</table>
 				</div>
 				<div>
-					<h3 class="text-xl font-semibold mb-3 text-blue-600">
-						技術的特徴：Swingbyだけの独自技術
-					</h3>
+					<h3>技術的特徴：Swingbyだけの独自技術</h3>
 					<div class="mb-4">
-						<h4 class="font-semibold text-gray-800">
-							中ペラ駆動レイアウト
-						</h4>
-						<p class="text-gray-700">
+						<h4>中ペラ駆動レイアウト</h4>
+						<p>
 							プロペラを胴体の中腹に配置する、特徴的な「中ペラ駆動」を採用。プロペラが生み出す気流が尾翼に直接当たることを防ぎ、機体の操縦性と安定性を格段に向上させます。パイロット前方の視界が拓けることも、長距離飛行における大きなメリットです。
 						</p>
 					</div>
 					<div>
-						<h4 class="font-semibold text-gray-800">
-							日本唯一の駆動伝達方式
-						</h4>
-						<p class="text-gray-700">
+						<h4>日本唯一の駆動伝達方式</h4>
+						<p>
 							パイロットの力をプロペラに伝える駆動系には、<strong
-								class="text-blue-700"
 								>日本で唯一、私たちだけが採用する「シャフト＋タイミングベルトドライブ」方式</strong
 							>を搭載。シャフトドライブの高い剛性と、タイミングベルトドライブの軽量性・確実性を両立させた、Swingby独創のハイブリッドシステムです。この革新的な機構が、人力飛行の常識を超える高効率なエネルギー伝達を実現します。
 						</p>
@@ -197,14 +207,10 @@ const sortedPosts = (await getCollection("blog"))
 		</div>
 	</section>
 
-	<section id="blog" class="py-12 md:py-20 bg-white">
+	<section id="blog">
 		<div class="container mx-auto px-6">
-			<h2
-				class="text-3xl md:text-4xl font-bold text-center mb-10 md:mb-16 section-title"
-			>
-				活動記録
-			</h2>
-			<p class="text-center text-lg text-gray-700 mb-8">
+			<h2>活動記録</h2>
+			<p class="text-center text-lg mb-8">
 				日々の活動やイベント情報、大会結果などを発信していきます。
 			</p>
 			<div class="grid md:grid-cols-3 gap-8">
@@ -213,26 +219,25 @@ const sortedPosts = (await getCollection("blog"))
 						<Card
 							title={post.data.title}
 							date={post.data.date}
-							id={post.id}
+							slug={post.id}
 						/>
 					))
 				}
 			</div>
+
 			<div class="text-center mt-12">
 				<a
 					href="/blog"
-					class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300"
+					class="bg-background text-foreground border-2 font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300 hover:bg-foreground hover:text-background"
 					>全ての記事を見る</a
 				>
 			</div>
 		</div>
 	</section>
 
-	<section id="join" class="py-12 md:py-20 bg-blue-600 text-white">
+	<section id="join">
 		<div class="container mx-auto px-6 text-center">
-			<h2 class="text-3xl md:text-4xl font-bold mb-6">
-				君の情熱が、翼になる。
-			</h2>
+			<h2>君の情熱が、翼になる。</h2>
 			<p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto">
 				設計図の上の1本の線が、現実の翼になる感動を。
 				仲間と汗を流し、ゼロから一つのものを創り上げる達成感を。
@@ -242,36 +247,32 @@ const sortedPosts = (await getCollection("blog"))
 			<div
 				class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 text-left mb-10"
 			>
-				<div class="bg-white text-gray-800 p-6 rounded-lg shadow-lg">
-					<h4 class="font-bold text-xl mb-2 text-blue-700">設計</h4>
+				<div class="bg-background p-6 rounded-lg shadow-lg">
+					<h4>設計</h4>
 					<p>
 						翼、プロペラ、駆動系、電装など、空力・構造・材料力学の知識を活かし、最強の機体を設計します。
 					</p>
 				</div>
-				<div class="bg-white text-gray-800 p-6 rounded-lg shadow-lg">
-					<h4 class="font-bold text-xl mb-2 text-blue-700">製作</h4>
+				<div class="bg-background p-6 rounded-lg shadow-lg">
+					<h4>製作</h4>
 					<p>
 						設計図を形にする、ものづくりの主役。複合材の成形や精密な加工技術が身につきます。
 					</p>
 				</div>
-				<div class="bg-white text-gray-800 p-6 rounded-lg shadow-lg">
-					<h4 class="font-bold text-xl mb-2 text-blue-700">
-						パイロット
-					</h4>
+				<div class="bg-background p-6 rounded-lg shadow-lg">
+					<h4>パイロット</h4>
 					<p>
 						チームの想いを一身に背負い、大空へ羽ばたく挑戦者。強靭な肉体と精神力が求められます。
 					</p>
 				</div>
-				<div class="bg-white text-gray-800 p-6 rounded-lg shadow-lg">
-					<h4 class="font-bold text-xl mb-2 text-blue-700">
-						地上支援
-					</h4>
+				<div class="bg-background p-6 rounded-lg shadow-lg">
+					<h4>地上支援</h4>
 					<p>
 						チームの活動を円滑に進めるための頭脳であり、手足。広報、会計、データ分析など、活躍の場は無限大です。
 					</p>
 				</div>
 			</div>
-			<h3 class="text-2xl font-semibold mb-4">新歓情報</h3>
+			<h3>新歓情報</h3>
 			<ul class="space-y-1 mb-8">
 				<li>第一回説明会: 2025年XX月XX日 XX時〜 @オンライン</li>
 				<li>第二回説明会: 2025年XX月XX日 XX時〜 @〇〇キャンパス</li>
@@ -279,22 +280,21 @@ const sortedPosts = (await getCollection("blog"))
 			<p class="mb-8">
 				少しでも興味を持った方は、お気軽に「お問い合わせ」からご連絡ください！
 			</p>
-			<a
-				href="#contact"
-				class="bg-white hover:bg-gray-200 text-blue-600 font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300"
-				>お問い合わせはこちら</a
-			>
+
+			<div class="text-center mt-12">
+				<a
+					href="#contact"
+					class="bg-background text-foreground border-2 font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300 hover:bg-foreground hover:text-background"
+					>お問い合わせはこちら</a
+				>
+			</div>
 		</div>
 	</section>
 
-	<section id="sponsorship" class="py-12 md:py-20 bg-gray-50">
+	<section id="sponsorship">
 		<div class="container mx-auto px-6">
-			<h2
-				class="text-3xl md:text-4xl font-bold text-center mb-10 md:mb-16 section-title"
-			>
-				スポンサー募集
-			</h2>
-			<p class="text-center text-lg text-gray-700 mb-8 max-w-3xl mx-auto">
+			<h2>スポンサー募集</h2>
+			<p class="text-center text-lg mb-8 max-w-3xl mx-auto">
 				共に「新たなる地平」を目指すパートナーを募集しています。
 				私たちの挑戦は、皆様からのご支援なくしては成り立ちません。
 				人力飛行機の開発には、CFRP（炭素繊維強化プラスチック）をはじめとする特殊な材料費、加工費、実験設備費など、多額の資金が必要となります。
@@ -302,17 +302,15 @@ const sortedPosts = (await getCollection("blog"))
 			</p>
 			<div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
 				<div>
-					<h3 class="text-xl font-semibold mb-3 text-blue-600">
-						ご支援のメリット
-					</h3>
-					<ul class="list-disc list-inside space-y-2 text-gray-700">
+					<h3>ご支援のメリット</h3>
+					<ul class="list-disc list-inside space-y-2">
 						<li>機体へのロゴステッカーの貼付</li>
 						<li>チームウェアへのロゴプリント</li>
 						<li>公式ウェブサイト、SNSでのご紹介</li>
 						<li>各種メディアで紹介された際の露出</li>
 						<li>地域貢献・社会貢献活動としてのアピール</li>
 					</ul>
-					<p class="mt-6 text-gray-700">
+					<p class="mt-6">
 						皆様のご支援が、私たちの翼となり、推進力となります。
 					</p>
 				</div>
@@ -324,35 +322,33 @@ const sortedPosts = (await getCollection("blog"))
 					/>
 				</div>
 			</div>
-			<p class="mt-8 text-center text-gray-700">
+			<p class="mt-8 text-center">
 				ご支援に関する詳細やご質問は、下記よりお気軽にお問い合わせください。
 			</p>
-			<div class="text-center mt-8">
+			<div class="text-center mt-12">
 				<a
 					href="#contact"
-					class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300"
+					class="bg-background text-foreground border-2 font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300 hover:bg-foreground hover:text-background"
 					>お問い合わせはこちら</a
 				>
 			</div>
 		</div>
 	</section>
 
-	<section id="contact" class="py-12 md:py-20 bg-white">
+	<section id="contact">
 		<div class="container mx-auto px-6">
-			<h2
-				class="text-3xl md:text-4xl font-bold text-center mb-10 md:mb-16 section-title"
-			>
-				お問い合わせ
-			</h2>
-			<p class="text-center text-lg text-gray-700 mb-8">
+			<h2>お問い合わせ</h2>
+			<p class="text-center text-lg mb-8">
 				チームへのご質問、見学希望、取材依頼、ご支援に関するご相談など、お気軽にご連絡ください。
 			</p>
-			<div class="max-w-lg mx-auto bg-gray-50 p-8 rounded-lg shadow-lg">
+			<div
+				class="max-w-lg mx-auto bg-background p-8 rounded-lg shadow-lg"
+			>
 				<p class="mb-4">
 					<strong>メールアドレス:</strong><br />
 					<a
 						href="mailto:melting.poppo@gmail.com"
-						class="text-blue-500 hover:underline"
+						class="text-primary hover:underline"
 						>melting.poppo@gmail.com</a
 					>
 				</p>
@@ -362,10 +358,10 @@ const sortedPosts = (await getCollection("blog"))
 						href="YOUR_GOOGLE_FORM_LINK_HERE"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="text-blue-500 hover:underline"
+						class="text-primary hover:underline"
 						>Googleフォームでのお問い合わせはこちら</a
 					>
-					<span class="text-sm text-gray-500 block"
+					<span class="text-sm block"
 						>(※Googleフォームのリンクを設定してください)</span
 					>
 				</p>

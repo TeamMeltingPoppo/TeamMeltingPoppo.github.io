@@ -6,36 +6,73 @@
 
 @import "tailwindcss";
 
-
-@theme {
+.dark {
   --color-primary: #2979ff;
   --color-secondary: #fb8c00;
   --color-accent: #ff5252;
+  --color-primary-hover: #5393ff;
+  --color-secondary-hover: #ffb347;
+  --color-accent-hover: #ff6f6f;
+  --color-background: #121212;
+  --color-foreground: #e0e0e0;
+  --color-inactive-background: #2e2e2e;
+  --color-inactive-foreground: #a0a0a0;
+  --color-inactive-background-hover: #2a2a2a;
+}
+
+.light {
+  --color-primary: #0239D6;
+  --color-secondary: #fb8c00;
+  --color-accent: #ff5252;
+  --color-primary-hover: #5393ff;
+  --color-secondary-hover: #ffb347;
+  --color-accent-hover: #ff6f6f;
+  --color-background: #ffffff;
+  --color-foreground: #121212;
+  --color-inactive-background: #f5f5f5;
+  --color-inactive-foreground: #121212;
+  --color-inactive-background-hover: #e0e0e0;
+}
+
+
+@theme {
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-accent: var(--color-accent);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-secondary-hover: var(--color-secondary-hover);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-inactive-background: var(--color-inactive-background);
+  --color-inactive-foreground: var(--color-inactive-foreground);
+  --color-inactive-background-hover: var(--color-inactive-background-hover);
 }
 
 html,
 body {
 	scroll-behavior: smooth;
 	scroll-padding-top: 4em;
+	@apply bg-background text-foreground;
 }
 
 h1 {
-	font-size: 3.052em;
+	@apply text-4xl md:text-5xl lg:text-6xl font-bold;
 }
 h2 {
-	font-size: 2.441em;
+	@apply text-3xl md:text-4xl lg:text-5xl font-bold text-center;
 }
 h3 {
-	font-size: 1.953em;
+	@apply text-2xl md:text-3xl lg:text-4xl font-bold;
 }
 h4 {
-	font-size: 1.563em;
+	@apply text-xl md:text-2xl lg:text-3xl font-bold;
 }
 h5 {
-	font-size: 1.25em;
+	@apply text-lg md:text-xl lg:text-2xl font-bold;
 }
 h6 {
-	font-size: 1em;
+	@apply text-base md:text-lg lg:text-xl font-bold;
 }
 
 h1,
@@ -47,30 +84,39 @@ h6 {
 	margin: 1em 0;
 }
 
+
+section {
+	@apply py-12 md:py-20
+}
+
 hr {
 	@apply my-8 xl:my-12 border-[0.5px];
 }
 
-@media (max-width: 720px) {
-	h1 {
-		font-size: 2.488em;
-	}
-	h2 {
-		font-size: 2.074em;
-	}
-	h3 {
-		font-size: 1.728em;
-	}
-	h4 {
-		font-size: 1.44em;
-	}
-	h5 {
-		font-size: 1.2em;
-	}
-	h6 {
-		font-size: 1em;
-	}
+svg {
+  display: inline-block;
+  fill: currentColor;
+  vertical-align: bottom;
+  transform: translateY(-4px);
 }
+
+/* ダークモード切替ボタン */
+html .darkicon {
+  @apply size-[1em];
+}
+
+html .lighticon {
+  @apply size-[0em];
+}
+
+html.dark .darkicon {
+  @apply size-[0em];
+}
+
+html.dark .lighticon {
+  @apply size-[1em];
+}
+
 .katex-display {
 	overflow-x: auto;
 	overflow-y: hidden;
@@ -86,11 +132,11 @@ hr {
 
 	/* list */
 	ul {
-		@apply pl-[1.125rem] xl:pl-[1.25rem] list-outside list-disc my-4;
+		@apply pl-4.5 xl:pl-5 list-outside list-disc my-4;
 	}
 
 	ol {
-		@apply pl-[1.125rem] xl:pl-[1.25rem] list-outside list-decimal my-4;
+		@apply pl-4.5 xl:pl-5 list-outside list-decimal my-4;
 	}
 
 	ol > li::marker {
@@ -116,13 +162,22 @@ hr {
 	}
 
 	/* image */
-	p > img {
+	img {
 		@apply rounded-md lg:max-w-[80%] xl:max-w-[75%] mx-auto m-12 xl:mt-12;
 	}
 
 	/* blockquote */
 	blockquote {
-		@apply block border-primary border-3 px-4 py-2 w-full h-fit my-8 xl:my-12 text-gray-500;
+		@apply block border-primary border-3 px-4 py-2 w-full h-fit my-8 xl:my-12 text-inactive-foreground rounded-md;
+	}
+
+	/* table */
+	table {
+		@apply w-full border-collapse my-8 xl:my-12;
+	}
+	th,
+	td {
+		@apply border border-foreground px-4 py-2 text-left;
 	}
 
 	/* hr */
@@ -131,7 +186,7 @@ hr {
 	}
 
 	/* iframe */
-	p > iframe {
+	iframe {
 		@apply w-full h-fit mx-auto aspect-video;
 	}
 
@@ -147,7 +202,7 @@ hr {
 
 	p > code,
 	li > code {
-		@apply text-sm lg:text-base xl:text-lg border px-1 py-[0.125rem] rounded-md;
+		@apply text-sm lg:text-base xl:text-lg border px-1 py-0.5 rounded-md;
 	}
 
 	.expressive-code {

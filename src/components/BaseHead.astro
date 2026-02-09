@@ -4,6 +4,7 @@
 import "../styles/global.css";
 import type { ImageMetadata } from "astro";
 import { SITE_TITLE } from "../consts";
+import logo from "../assets/logo.png";
 
 interface Props {
 	title: string;
@@ -30,6 +31,9 @@ const { title, image, description } = Astro.props;
 <meta name="generator" content={Astro.generator} />
 {description ? <meta name="description" content={description} /> : null}
 
+<!-- Google site verification -->
+<meta name="google-site-verification" content="2X59wfMbUNnhABKeMN4kK6vv9vnac2cTtAHftMUjasY" />
+
 <!-- Open Graph / Facebook -->
 <meta prefix="og: http://ogp.me/ns#" />
 <meta property="og:title" content={title} />
@@ -46,7 +50,12 @@ const { title, image, description } = Astro.props;
 			property="og:image"
 			content={new URL(image.src, Astro.site).toString()}
 		/>
-	) : null
+	) : (
+		<meta
+			property="og:image"
+			content={new URL(logo.src, Astro.site).toString()}
+		/>
+	)
 }
 
 <meta name="twitter:card" content="summary_large_image" />
@@ -58,9 +67,14 @@ const { title, image, description } = Astro.props;
 			name="twitter:image"
 			content={new URL(image.src, Astro.site).toString()}
 		/>
-	) : null
+	) : (
+		<meta
+			name="twitter:image"
+			content={new URL(logo.src, Astro.site).toString()}
+		/>
+	)
 }
-<meta name="twitter:image:alt" content={image?.alt || SITE_TITLE} />
+<meta name="twitter:image:alt" content={title} />
 <meta name="twitter:creator" content="@melting_poppo" />
 
 <!-- Font preloads -->

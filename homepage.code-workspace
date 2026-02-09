@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"name": "teammeltingpoppo.github.io",
+			"path": "."
+		},
+		{
+			"name": "content",
+			"path": "content/"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.css": "tailwindcss"
+		}
+	}
+}
