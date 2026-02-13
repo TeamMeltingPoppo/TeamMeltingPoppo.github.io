@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Base.astro";
 import { Image } from "astro:assets";
+import Activity from "../../components/Activity.astro";
 
 import TopWing from "../../assets/activity/top/wing.png";
 import TopDrive from "../../assets/activity/top/drive.png";
@@ -10,6 +11,15 @@ import TopFrame from "../../assets/activity/top/frame.png";
 import TopPropeller from "../../assets/activity/top/propeller.png";
 import TopAvionics from "../../assets/activity/top/avionics.png";
 import TopPilot from "../../assets/activity/top/pilot.png";
+
+import WingImage from "../../assets/activity/wing/image.png";
+import FrameImage from "../../assets/activity/frame/image.png";
+import FairingImage from "../../assets/activity/fairing/image.png";
+import AvionicsImage from "../../assets/activity/avionics/image.png";
+import DriveImage from "../../assets/activity/drive/image.png";
+import PropellerImage from "../../assets/activity/propeller/image.png";
+import PilotImage from "../../assets/activity/pilot/image.png";
+import LinkageImage from "../../assets/activity/linkage/image.png";
 ---
 
 <Layout
@@ -18,130 +28,121 @@ import TopPilot from "../../assets/activity/top/pilot.png";
 >
     <section>
         <h1>活動紹介</h1>
-        <div class="grid md:grid-cols-2 xl:grid-cols-4 w-full">
-            <a href="#Wing">
-                <div class="p-1 relative">
-                    <Image
-                        src={TopWing}
-                        alt="Wing"
-                        class="w-full h-full object-cover"
-                    />
-
-                    <div
-                        class="absolute inset-0 flex flex-col items-center justify-center px-12 text-white bg-black/50 text-right"
-                    >
-                        <h2 class="font-semibold">Wing</h2>
-                    </div>
-                </div>
+        <div
+            class="grid sm:grid-cols-2 lg:grid-cols-4 w-full space-x-2 space-y-2"
+        >
+            <a href="#Wing" class="p-2 bg-primary/20">
+                <span class="font-semibold px-2">Wing</span>
+                <Image src={TopWing} alt="Wing" class="w-full h-auto" />
             </a>
-            <a href="#Drive">
-                <div class="p-1 relative">
-                    <Image
-                        src={TopDrive}
-                        alt="Drive"
-                        class="w-full h-full object-cover"
-                    />
-
-                    <div
-                        class="absolute inset-0 flex flex-col items-center justify-center px-12 text-white bg-black/50 text-right"
-                    >
-                        <h2 class="font-semibold">Drive</h2>
-                    </div>
-                </div>
+            <a href="#Drive" class="p-2 bg-secondary/20">
+                <span class="font-semibold px-2">Drive</span>
+                <Image src={TopDrive} alt="Drive" class="w-full h-auto" />
             </a>
-            <a href="#Fairing" class="p-1">
-                <div class="p-1 relative">
-                    <Image
-                        src={TopFairing}
-                        alt="Fairing"
-                        class="w-full h-full object-cover"
-                    />
-
-                    <div
-                        class="absolute inset-0 flex flex-col items-center justify-center px-12 text-white bg-black/50 text-right"
-                    >
-                        <h2 class="font-semibold">Fairing</h2>
-                    </div>
-                </div>
+            <a href="#Fairing" class="p-2 bg-primary/20">
+                <span class="font-semibold px-2">Fairing</span>
+                <Image src={TopFairing} alt="Fairing" class="w-full h-auto" />
             </a>
-            <a href="#Linkage" class="p-1">
-                <div class="p-1 relative">
-                    <Image src={TopLinkage} alt="Linkage" class="w-full h-full object-cover" />
-                    <div
-                        class="absolute inset-0 flex flex-col items-center justify-center px-12 text-white bg-black/50 text-right"
-                    >
-                        <h2 class="font-semibold">Linkage</h2>
-                    </div>
-                </div>
+            <a href="#Linkage" class="p-2 bg-secondary/20">
+                <span class="font-semibold px-2">Linkage</span>
+                <Image src={TopLinkage} alt="Linkage" class="w-full h-auto" />
             </a>
-            <a href="#Frame" class="p-1">
-                <div class="p-1 relative">
-                    <Image src={TopFrame} alt="Frame" class="w-full h-full object-cover" />
-                    <div
-                        class="absolute inset-0 flex flex-col items-center justify-center px-12 text-white bg-black/50 text-right"
-                    >
-                        <h2 class="font-semibold">Frame</h2>
-                    </div>
-                </div>
+            <a href="#Frame" class="p-2 bg-primary/20">
+                <span class="font-semibold px-2">Frame</span>
+                <Image src={TopFrame} alt="Frame" class="w-full h-auto" />
             </a>
-            <a href="#Propeller" class="p-1">
-                <div class="p-1 relative">
-                    <Image
-                        src={TopPropeller}
-                        alt="Propeller"
-                        class="w-full h-full object-cover"
-                    />
-                    <div
-                        class="absolute inset-0 flex flex-col items-center justify-center px-12 text-white bg-black/50 text-right"
-                    >
-                        <h2 class="font-semibold">Propeller</h2>
-                    </div>
-                </div>
+            <a href="#Propeller" class="p-2 bg-secondary/20">
+                <span class="font-semibold px-2">Propeller</span>
+                <Image
+                    src={TopPropeller}
+                    alt="Propeller"
+                    class="w-full h-auto"
+                />
             </a>
-            <a href="#Avionics" class="p-1">
-                <div class="p-1 relative">
-                    <Image src={TopAvionics} alt="Avionics" class="w-full h-full object-cover" />
-                    <div
-                        class="absolute inset-0 flex flex-col items-center justify-center px-12 text-white bg-black/50 text-right"
-                    >
-                        <h2 class="font-semibold">Avionics</h2>
-                    </div>
-                </div>
+            <a href="#Avionics" class="p-1 bg-primary/20">
+                <span class="font-semibold px-2">Avionics</span>
+                <Image src={TopAvionics} alt="Avionics" class="w-full h-auto" />
             </a>
-            <a href="#Pilot" class="p-1">
-                <div class="p-1 relative">
-                    <Image src={TopPilot} alt="Pilot" class="w-full h-full object-cover" />
-                    <div
-                        class="absolute inset-0 flex flex-col items-center justify-center px-12 text-white bg-black/50 text-right"
-                    >
-                        <h2 class="font-semibold">Pilot</h2>
-                    </div>
-                </div>
+            <a href="#Pilot" class="p-1 bg-secondary/20">
+                <span class="font-semibold px-2">Pilot</span>
+                <Image src={TopPilot} alt="Pilot" class="w-full h-auto" />
             </a>
         </div>
     </section>
     <section id="Wing">
-        <h2>Wing</h2>
-    </section>
-    <section id="Drive">
-        <h2>Drive</h2>
-    </section>
-    <section id="Fairing">
-        <h2>Fairing</h2>
-    </section>
-    <section id="Linkage">
-        <h2>Linkage</h2>
+        <Activity name="Wing" image={WingImage} place="戸田">
+            <p>
+                翼班は、機体の翼の設計・製作を担当する班です。<br
+                />普段の大学の専攻、ものづくり経験の有無を問わず、様々なメンバーが活躍しています。
+            </p>
+        </Activity>
     </section>
     <section id="Frame">
-        <h2>Frame</h2>
+        <Activity name="Frame・Cockpit" image={FrameImage} place="戸田">
+            <p>
+                フレーム班は、機体のフレームや操縦桿にまつわる部分の製作・設計を行っています。<br
+                />
+                破壊試験の結果に基づいた設計を行い、安全性を確保しつつ軽量化を実現しています。
+            </p>
+        </Activity>
     </section>
-    <section id="Propeller">
-        <h2>Propeller</h2>
+    <section id="Fairing">
+        <Activity name="Fairing" image={FairingImage} place="戸田,仙台,滋賀">
+            <p>
+                フェアリング班は、コックピット外形の設計・製作を担当する班です。<br
+                />
+                現在は独自に開発した翼型最適化プログラムを用いた設計をしています。<br
+                />
+                離れた地域から議論を重ね、製作時には戸田に集まり集中的に作業を行っています。<br
+                />
+            </p>
+        </Activity>
     </section>
     <section id="Avionics">
-        <h2>Avionics</h2>
+        <Activity image={AvionicsImage} name="Avionics" place="戸田">
+            <p>
+                電装班は、人力飛行機に搭載するセンサーの設計・開発をしています。<br
+                />
+                これまでには、高度計・舵角計の設計、製作・複合航法基板の設計を行いました。
+            </p>
+        </Activity>
+    </section>
+    <section id="Drive">
+        <Activity name="Drive" image={DriveImage} place="戸田,滋賀">
+            <p>
+                駆動班は、パイロットの力を推進力へと変える駆動系の設計・製作を担当する班です。
+                硬く軽くをモットーに設計しています。<br />
+                CADを用いて設計を行い、製作は外部に委託しています。<br />
+                駆動は定石が確立されていますが、まだ誰も考えたことがない駆動があるはずです。<br/>
+                一緒に駆動の限界を追求しましょう！
+            </p>
+        </Activity>
+    </section>
+    <section id="Propeller">
+        <Activity name="Propeller" image={PropellerImage} place="戸田,滋賀">
+            <p>
+                プロペラ班は、人力飛行機の推力を生み出す部分であるプロペラの設計・製作を担当する班です。<br/>
+                回転数や効率を考慮しながら形状を検討し、機体に適したプロペラを形にしています。<br/>
+                設計にはCAD、製作にはカーボンを主に使用しています。
+            </p>
+        </Activity>
     </section>
     <section id="Pilot">
-        <h2>Pilot</h2>
+        <Activity name="Pilot" image={PilotImage} place="戸田">
+            <p>
+                パイロット班は、実際に機体に乗り込み飛行を行う班です。<br/>
+                操縦技術を磨くとともに、自転車競技への参加などを通して日々トレーニングに励んでいます。<br/>
+                目指せ5.5倍！<br/>
+                みんなもやろう富士川TF to フジヒル！！
+            </p>
+        </Activity>
+    </section>
+    <section id="Linkage">
+        <Activity name="Linkage" image={LinkageImage} place="戸田">
+            <p>
+                操舵班は、パイロットの操作を機体に伝える操縦系統を担当する班です。<br/>
+                確実で扱いやすい操舵を目指し、信頼性の高い機構づくりに取り組んでいます。
+            </p>
+        </Activity>
     </section>
 </Layout>

@@ -5,7 +5,7 @@ import ThemeToggle from "./ThemeToggle.astro";
 import Logo from "../assets/logo.png";
 import LogoDark from "../assets/logo-dark.png";
 import { Image } from "astro:assets";
-import "tailwindcss"
+import "tailwindcss";
 ---
 
 <nav
@@ -19,15 +19,11 @@ import "tailwindcss"
             src={Logo}
             alt="Swingby Logo"
             class="object-cover w-auto lightlogo"
-            format="webp"
-            loading="eager"
           />
           <Image
             src={LogoDark}
             alt="Swingby Logo"
             class="object-cover w-auto darklogo"
-            format="webp"
-            loading="eager"
           />
           <span class="font-bold text-xl">Swingby</span>
         </a>
@@ -53,6 +49,7 @@ import "tailwindcss"
         <div class="flex space-x-4">
           <HeaderLink href="/#home">ホーム</HeaderLink>
           <HeaderLink href="/#about">私たちについて</HeaderLink>
+          <HeaderLink href="/activity">活動紹介</HeaderLink>
           <HeaderLink href="/#aircraft">機体紹介</HeaderLink>
           <HeaderLink href="/#blog">活動記録</HeaderLink>
           <HeaderLink href="/#join">メンバー募集</HeaderLink>
@@ -72,6 +69,7 @@ import "tailwindcss"
     <div class="space-y-1 px-2 pt-2 pb-3">
       <HeaderLink href="/#home">ホーム</HeaderLink>
       <HeaderLink href="/#about">私たちについて</HeaderLink>
+      <HeaderLink href="/activity">活動紹介</HeaderLink>
       <HeaderLink href="/#aircraft">機体紹介</HeaderLink>
       <HeaderLink href="/#blog">活動記録</HeaderLink>
       <HeaderLink href="/#join">メンバー募集</HeaderLink>

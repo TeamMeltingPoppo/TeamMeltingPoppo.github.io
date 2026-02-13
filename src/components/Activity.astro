@@ -1,0 +1,28 @@
+---
+import type { ImageMetadata } from "astro";
+import { Image } from "astro:assets";
+
+type Props = {
+    name : string;
+    image : ImageMetadata;
+    place : string;
+};
+
+const {name,image,place}= Astro.props;
+---
+
+<div>
+<div class="relative w-full">
+    <Image src={image} alt=`${name}` class="w-full h-full object-cover"/>
+    <div class="absolute inset-0 flex flex-col items-end justify-center px-12 text-white bg-black/20 text-right">
+        <span class="font-extrabold text-4xl">{name.toUpperCase()}</span>
+    </div>
+</div>
+<div class="p-4">
+    <slot/>
+</div>
+<div class="flex grid-cols-3 items-center align-top  justify-center">
+    <span class=`p-3 m-1 border-2 rounded-lg font-bold ${place.includes("戸田") ? "text-background bg-foreground": "text-foreground bg-background"}`>戸田</span>
+    <span class=`p-3 m-1 border-2 rounded-lg font-bold ${place.includes("仙台") ? "text-background bg-foreground": "text-foreground bg-background"}`>仙台</span>
+    <span class=`p-3 m-1 border-2 rounded-lg font-bold ${place.includes("滋賀") ? "text-background bg-foreground": "text-foreground bg-background"}`>滋賀</span>
+</div>
