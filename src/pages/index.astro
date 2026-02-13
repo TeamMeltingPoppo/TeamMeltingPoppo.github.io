@@ -2,10 +2,23 @@
 import Layout from "../layouts/Base.astro";
 import Card from "../components/Card.astro";
 import { getCollection } from "astro:content";
-import HistoryImage from "../assets/home/history.png";
 import Strategy from "../components/Strategy.astro";
-import Top1 from "../assets/home/top1.png";
 import { Image } from "astro:assets";
+
+import Top1 from "../assets/home/top/1.png";
+
+import Activity1 from "../assets/home/activity/1.png";
+import Activity2 from "../assets/home/activity/2.png";
+import Activity3 from "../assets/home/activity/3.png";
+import Activity4 from "../assets/home/activity/4.png";
+import Activity5 from "../assets/home/activity/5.png";
+import Activity6 from "../assets/home/activity/6.png";
+import Activity7 from "../assets/home/activity/7.png";
+import Activity8 from "../assets/home/activity/8.png";
+import Activity9 from "../assets/home/activity/9.png";
+import Activity10 from "../assets/home/activity/10.png";
+import Activity11 from "../assets/home/activity/11.png";
+import Activity12 from "../assets/home/activity/12.png";
 
 const sortedPosts = (await getCollection("blog"))
 	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -16,7 +29,7 @@ const sortedPosts = (await getCollection("blog"))
 	title="Swingby人力飛行機チーム"
 	description="学生人力飛行機チームSwingbyの公式サイトへようこそ。私たちは、長距離飛行記録更新を目指し、革新的な設計と情熱で新たな地平を切り拓きます。"
 >
-	<section id="home" class="">
+	<section id="home">
 		<div class="relative w-full h-[600px] md:min-h-screen bg-black/40">
 			<Image
 				src={Top1}
@@ -114,11 +127,42 @@ const sortedPosts = (await getCollection("blog"))
 				</ul>
 			</section>
 
-			<section class="mt-12 md:mt-16">
+			<section>
 				<h3>Our Activity - 活動紹介</h3>
-				<p>
+				<p class="mb-8">
 					設計、製作、トレーニング…。私たちの活動は多岐にわたります。
 				</p>
+
+				<div class="image-slider">
+					<ul>
+						<li><Image src={Activity1} alt="Activity 1"></Image></li>
+						<li><Image src={Activity2} alt="Activity 2"></Image></li>
+						<li><Image src={Activity3} alt="Activity 3"></Image></li>
+						<li><Image src={Activity4} alt="Activity 4"></Image></li>
+						<li><Image src={Activity5} alt="Activity 5"></Image></li>
+						<li><Image src={Activity6} alt="Activity 6"></Image></li>
+						<li><Image src={Activity7} alt="Activity 7"></Image></li>
+						<li><Image src={Activity8} alt="Activity 8"></Image></li>
+						<li><Image src={Activity9} alt="Activity 9"></Image></li>
+						<li><Image src={Activity10} alt="Activity 10"></Image></li>
+						<li><Image src={Activity11} alt="Activity 11"></Image></li>
+						<li><Image src={Activity12} alt="Activity 12"></Image></li>
+					</ul>
+					<ul>
+						<li><Image src={Activity1} alt="Activity 1"></Image></li>
+						<li><Image src={Activity2} alt="Activity 2"></Image></li>
+						<li><Image src={Activity3} alt="Activity 3"></Image></li>
+						<li><Image src={Activity4} alt="Activity 4"></Image></li>
+						<li><Image src={Activity5} alt="Activity 5"></Image></li>
+						<li><Image src={Activity6} alt="Activity 6"></Image></li>
+						<li><Image src={Activity7} alt="Activity 7"></Image></li>
+						<li><Image src={Activity8} alt="Activity 8"></Image></li>
+						<li><Image src={Activity9} alt="Activity 9"></Image></li>
+						<li><Image src={Activity10} alt="Activity 10"></Image></li>
+						<li><Image src={Activity11} alt="Activity 11"></Image></li>
+						<li><Image src={Activity12} alt="Activity 12"></Image></li>
+					</ul>
+				</div>
 
 				<div class="text-center mt-12">
 					<a
@@ -134,7 +178,7 @@ const sortedPosts = (await getCollection("blog"))
 	<section id="aircraft">
 		<div class="container mx-auto px-6">
 			<h2>機体紹介 - "Pilgrim"</h2>
-			<p class="text-center text-lg mb-8">
+			<p class="mb-8">
 				私たちの夢と技術の結晶である初号機「Pilgrim」。新たなる地平を目指す「巡礼者」の名を冠したこの機体は、長距離飛行記録の更新という目的地へ、私たちを導いてくれます。
 			</p>
 
@@ -152,13 +196,13 @@ const sortedPosts = (await getCollection("blog"))
 					Pilgrim :〔宗教上の理由で神聖な場所を訪れる〕巡礼者◆可算名詞
 				</p>
 				<p>
-過去の設計者たちの思考の痕跡を辿り、人力機の解を探し求めるその試みになぞらえて命名されました。
+					過去の設計者たちの思考の痕跡を辿り、人力機の解を探し求めるその試みになぞらえて命名されました。
 				</p>
 				<p>
-どんな場所に生きる鳥人間も、夏になれば琵琶湖に集まります。この営みも一つの巡礼だと考えられます。
+					どんな場所に生きる鳥人間も、夏になれば琵琶湖に集まります。この営みも一つの巡礼だと考えられます。
 				</p>
 				<p>
-Pilgrimが役目を終えるとき、Swingbyは次のステージへと進むと考えています。その線引きを明確にするための名前でもあります。
+					Pilgrimが役目を終えるとき、Swingbyは次のステージへと進むと考えています。その線引きを明確にするための名前でもあります。
 				</p>
 			</div>
 
@@ -171,34 +215,35 @@ Pilgrimが役目を終えるとき、Swingbyは次のステージへと進むと
 					<table class="w-full text-left border-collapse">
 						<thead>
 							<tr>
-								<th class="border-b-2 p-2 bg-gray-200"
+								<th
+									class="border-b p-2 text-background bg-foreground"
 									>スペック</th
 								>
-								<th class="border-b-2 p-2 bg-gray-200">値</th>
+								<th
+									class="border-b p-2 text-background bg-foreground"
+									>値</th
+								>
 							</tr>
 						</thead>
 						<tbody>
-							<tr
-								><td class="border-b p-2">機体名</td><td
-									class="border-b p-2">Pilgrim</td
-								></tr
-							>
-							<tr
-								><td class="border-b p-2">全長</td><td
-									class="border-b p-2">(設計中)</td
-								></tr
-							>
-							<tr
-								><td class="border-b p-2">翼幅 (スパン)</td><td
-									class="border-b p-2">27.5 m</td
-								></tr
-							>
-							<tr
-								><td class="border-b p-2">設計巡航速度</td><td
-									class="border-b p-2"
+							<tr>
+								<td class="border-b p-2">機体名</td>
+								<td class="border-b p-2">Pilgrim</td>
+							</tr>
+							<tr>
+								<td class="border-b p-2">全長</td>
+								<td class="border-b p-2">(設計中)</td>
+							</tr>
+							<tr>
+								<td class="border-b p-2">翼幅 (スパン)</td>
+								<td class="border-b p-2">27.5 m</td>
+							</tr>
+							<tr>
+								<td class="border-b p-2">設計巡航速度</td>
+								<td class="border-b p-2"
 									>8.35 m/s (30.06 km/h)</td
-								></tr
-							>
+								>
+							</tr>
 						</tbody>
 					</table>
 				</div>
@@ -253,7 +298,8 @@ Pilgrimが役目を終えるとき、Swingbyは次のステージへと進むと
 
 	<section id="join" class="bg-inactive-background text-foreground">
 		<div class="container mx-auto px-6 text-center">
-			<span class="text-accent font-semibold text-lg">メンバー募集中</span>
+			<span class="text-accent font-semibold text-lg">メンバー募集中</span
+			>
 			<h2>君の情熱が、翼になる。</h2>
 			<p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto">
 				設計図の上の1本の線が、現実の翼になる感動を。
@@ -291,14 +337,13 @@ Pilgrimが役目を終えるとき、Swingbyは次のステージへと進むと
 			</div>
 			<h3>出身チーム</h3>
 			<p class="mb-8">
-				日本大学理工学部航空研究所,  東京科学大学 Meister, 早稲田大学宇宙航空研究会 WASA, 
-東北大学 Windnauts, Team Birdman Trial, 東京都立大学鳥人間部 T-MIT, 
-つくば鳥人間の会, 立命館大学鳥人間サークルRAPT, 静岡大学ヒコーキ部, 
-帝京大学 Sky Project, 名古屋大学 AirCraft
+				日本大学理工学部航空研究会, 東京科学大学 Meister,
+				早稲田大学宇宙航空研究会 WASA, 東北大学 Windnauts, Team Birdman
+				Trial, 東京都立大学鳥人間部 T-MIT, つくば鳥人間の会,
+				立命館大学鳥人間サークルRAPT, 静岡大学ヒコーキ部, 帝京大学 Sky
+				Project, 名古屋大学 AirCraft
 			</p>
-			<p class="mb-8 text-accent font-semibold">
-				未経験者も在籍中！！
-			</p>
+			<p class="mb-8 text-accent font-semibold">未経験者も在籍中！！</p>
 			<h3>新歓情報</h3>
 			<p class="mb-4">
 				作業場見学は随時受け付けております。少しでも興味を持った方は、お気軽に「お問い合わせ」からご連絡ください！
@@ -351,7 +396,7 @@ Pilgrimが役目を終えるとき、Swingbyは次のステージへと進むと
 			<div class="text-center mt-12">
 				<a
 					href="#contact"
-					class="bg-primary text-white border-2 font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300 hover:bg-primary-hover hover:text-background"
+					class="bg-background text-foreground border-2 font-semibold py-3 px-8 rounded-lg shadow-md transition duration-300 hover:bg-foreground hover:text-background"
 					>お問い合わせはこちら</a
 				>
 			</div>

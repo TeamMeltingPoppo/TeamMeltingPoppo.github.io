@@ -9,7 +9,7 @@
 .dark {
   --color-primary: #2979ff;
   --color-secondary: #fb8c00;
-  --color-accent: #920909;
+  --color-accent: #ed2828;
   --color-primary-hover: #5393ff;
   --color-secondary-hover: #ffb347;
   --color-accent-hover: #ff6f6f;
@@ -86,7 +86,7 @@ h6 {
 
 
 section {
-	@apply py-12 md:py-20
+	@apply py-8 md:py-16
 }
 
 hr {
@@ -139,6 +139,44 @@ html.dark .lightlogo {
 	overflow-y: hidden;
     text-align: center;
 	white-space: nowrap;
+}
+
+.image-slider {
+  @apply flex w-full overflow-hidden h-[200px] relative;
+}
+
+.image-slider ul {
+	@apply flex p-0 m-0;
+}
+
+.image-slider li {
+	@apply list-none w-[300px];
+}
+
+.image-slider ul:first-child{
+  animation: slide1 120s -60s linear infinite;
+}
+
+.image-slider ul:last-child {
+  animation: slide2 120s linear infinite;
+}
+
+@keyframes slide1 {
+  0% {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes slide2 {
+  0% {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-200%);
+  }
 }
 
 #article-content {
