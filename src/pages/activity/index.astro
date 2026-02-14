@@ -28,44 +28,115 @@ import LinkageImage from "../../assets/activity/linkage/image.png";
 >
     <section>
         <h1>活動紹介</h1>
+        <p class="mb-8 p-2">
+            Swingbyは8つの班に分かれて機体製作を進めています。<br/>
+            埼玉県戸田市の本部を拠点に、滋賀と仙台にも支部を設置。全国各地に点在するメンバーが連携し、場所の垣根を越えて活動を展開しています。
+        </p>
         <div
-            class="grid sm:grid-cols-2 lg:grid-cols-4 w-full space-x-2 space-y-2"
+            class="grid grid-cols-2 md:grid-cols-4 w-full space-x-2 space-y-2 items-center justify-center p-2"
         >
-            <a href="#Wing" class="p-2 bg-primary/20">
-                <span class="font-semibold px-2">Wing</span>
-                <Image src={TopWing} alt="Wing" class="w-full h-auto" />
-            </a>
-            <a href="#Drive" class="p-2 bg-secondary/20">
-                <span class="font-semibold px-2">Drive</span>
-                <Image src={TopDrive} alt="Drive" class="w-full h-auto" />
-            </a>
-            <a href="#Fairing" class="p-2 bg-primary/20">
-                <span class="font-semibold px-2">Fairing</span>
-                <Image src={TopFairing} alt="Fairing" class="w-full h-auto" />
-            </a>
-            <a href="#Linkage" class="p-2 bg-secondary/20">
-                <span class="font-semibold px-2">Linkage</span>
-                <Image src={TopLinkage} alt="Linkage" class="w-full h-auto" />
-            </a>
-            <a href="#Frame" class="p-2 bg-primary/20">
-                <span class="font-semibold px-2">Frame</span>
-                <Image src={TopFrame} alt="Frame" class="w-full h-auto" />
-            </a>
-            <a href="#Propeller" class="p-2 bg-secondary/20">
-                <span class="font-semibold px-2">Propeller</span>
+            <a href="#Wing" class="relative">
                 <Image
-                    src={TopPropeller}
-                    alt="Propeller"
-                    class="w-full h-auto"
+                    src={TopWing}
+                    alt="Wing"
+                    class="w-full h-full object-cover rounded-2xl"
                 />
+                <div
+                    class="absolute inset-0 flex flex-col items-center justify-center px-12 text-white bg-black/50 text-right rounded-2xl"
+                >
+                    <h2 class="font-semibold">Wing</h2>
+                </div>
             </a>
-            <a href="#Avionics" class="p-1 bg-primary/20">
-                <span class="font-semibold px-2">Avionics</span>
-                <Image src={TopAvionics} alt="Avionics" class="w-full h-auto" />
+            <a href="#Drive" class="relative">
+                    <Image
+                        src={TopDrive}
+                        alt="Drive"
+                        class="w-full h-full object-cover rounded-2xl"
+                    />
+
+                    <div
+                        class="absolute inset-0 flex flex-col items-center justify-center px-12 text-white bg-black/50 text-right rounded-2xl"
+                    >
+                        <h2 class="font-semibold">Drive</h2>
+                    </div>
             </a>
-            <a href="#Pilot" class="p-1 bg-secondary/20">
-                <span class="font-semibold px-2">Pilot</span>
-                <Image src={TopPilot} alt="Pilot" class="w-full h-auto" />
+            <a href="#Fairing" class="relative">
+                    <Image
+                        src={TopFairing}
+                        alt="Fairing"
+                        class="w-full h-full object-cover rounded-2xl"
+                    />
+
+                    <div
+                        class="absolute inset-0 flex flex-col items-center justify-center px-12 text-white bg-black/50 text-right rounded-2xl"
+                    >
+                        <h2 class="font-semibold">Fairing</h2>
+                    </div>
+            </a>
+            <a href="#Linkage" class="relative">
+                    <Image
+                        src={TopLinkage}
+                        alt="Linkage"
+                        class="w-full h-full object-cover rounded-2xl"
+                    />
+
+                    <div
+                        class="absolute inset-0 flex flex-col items-center justify-center px-12 text-white bg-black/50 text-right rounded-2xl"
+                    >
+                        <h2 class="font-semibold">Linkage</h2>
+                    </div>
+            </a>
+            <a href="#Frame" class="relative">
+                    <Image
+                        src={TopFrame}
+                        alt="Frame"
+                        class="w-full h-full object-cover rounded-2xl"
+                    />
+
+                    <div
+                        class="absolute inset-0 flex flex-col items-center justify-center px-12 text-white bg-black/50 text-right rounded-2xl"
+                    >
+                        <h2 class="font-semibold">Frame</h2>
+                    </div>
+            </a>
+            <a href="#Propeller" class="relative">
+                    <Image
+                        src={TopPropeller}
+                        alt="Propeller"
+                        class="w-full h-full object-cover rounded-2xl"
+                    />
+
+                    <div
+                        class="absolute inset-0 flex flex-col items-center justify-center px-12 text-white bg-black/50 text-right rounded-2xl"
+                    >
+                        <h2 class="font-semibold">Propeller</h2>
+                    </div>
+            </a>
+            <a href="#Avionics" class="relative">
+                    <Image
+                        src={TopAvionics}
+                        alt="Avionics"
+                        class="w-full h-full object-cover rounded-2xl"
+                    />
+
+                    <div
+                        class="absolute inset-0 flex flex-col items-center justify-center px-12 text-white bg-black/50 text-right rounded-2xl"
+                    >
+                        <h2 class="font-semibold">Avionics</h2>
+                    </div>
+            </a>
+            <a href="#Pilot" class="relative">
+                    <Image
+                        src={TopPilot}
+                        alt="Pilot"
+                        class="w-full h-full object-cover rounded-2xl"
+                    />
+
+                    <div
+                        class="absolute inset-0 flex flex-col items-center justify-center px-12 text-white bg-black/50 text-right rounded-2xl"
+                    >
+                        <h2 class="font-semibold">Pilot</h2>
+                    </div>
             </a>
         </div>
     </section>
