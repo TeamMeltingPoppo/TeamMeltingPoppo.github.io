@@ -1,0 +1,40 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+type Props = {
+    images: ImageMetadata[];
+};
+
+const { images } = Astro.props;
+---
+
+<div class="relative w-full h-full overflow-hidden">
+    {images.map((image, index) => (
+        <Image
+            src={image}
+            alt={`トップ画像${index + 1}`}
+            class="absolute w-full h-full object-cover transition-opacity duration-1000 opacity-0 carousel-image"
+            format="webp"
+            loading="eager"
+        />
+    ))}
+</div>
+
+<script>
+    let currentIndex = 0;
+    const imageElements = document.querySelectorAll(".carousel-image");
+
+    function showImage(index: number) {
+        imageElements.forEach((img, i) => {
+            img.style.opacity = i === index ? "1" : "0";
+        });
+    }
+
+    showImage(currentIndex);
+    
+    setInterval(() => {
+        currentIndex = (currentIndex + 1) % imageElements.length;
+        showImage(currentIndex);
+    }, 5000); // 5秒ごとに画像を切り替える
+</script>

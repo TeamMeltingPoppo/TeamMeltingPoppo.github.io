@@ -3,9 +3,12 @@ import Layout from "../layouts/Base.astro";
 import Card from "../components/Card.astro";
 import { getCollection } from "astro:content";
 import Strategy from "../components/Strategy.astro";
+import Carousel from "../components/Carousel.astro";
 import { Image } from "astro:assets";
 
 import Top1 from "../assets/home/top/1.png";
+import Top2 from "../assets/home/top/2.png";
+import Top3 from "../assets/home/top/3.png";
 
 import ActivitySlide from "../assets/home/activity/slide.png";
 
@@ -20,13 +23,7 @@ const sortedPosts = (await getCollection("blog"))
 >
 	<section id="home">
 		<div class="relative w-full h-[600px] md:min-h-screen bg-black/40">
-			<Image
-				src={Top1}
-				alt="トップ画像1"
-				class="w-full h-full object-cover"
-				format="webp"
-				loading="eager"
-			/>
+			<Carousel images={[Top1, Top2, Top3]} />
 			<div
 				class="absolute inset-0 flex flex-col items-end justify-center px-12 text-white bg-black/50 text-shadow-black text-shadow-lg text-right"
 			>
