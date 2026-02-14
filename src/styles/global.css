@@ -141,42 +141,19 @@ html.dark .lightlogo {
 	white-space: nowrap;
 }
 
-.image-slider {
-  @apply flex w-full overflow-hidden h-[200px] relative;
+
+.animate-infinite-scroll {
+	animation: scroll-x 150s linear infinite;
 }
 
-.image-slider ul {
-	@apply flex p-0 m-0;
-}
-
-.image-slider li {
-	@apply list-none w-[300px];
-}
-
-.image-slider ul:first-child{
-  animation: slide1 120s -60s linear infinite;
-}
-
-.image-slider ul:last-child {
-  animation: slide2 120s linear infinite;
-}
-
-@keyframes slide1 {
-  0% {
-    transform: translateX(100%);
-  }
-  to {
-    transform: translateX(-100%);
-  }
-}
-
-@keyframes slide2 {
-  0% {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-200%);
-  }
+@keyframes scroll-x {
+	0% {
+		transform: translateX(0);
+	}
+	100% {
+		/* 画像を2枚並べているので1枚分の幅（-100%）移動した瞬間に0%に戻ることで，ユーザーにはループしているように見える*/
+		transform: translateX(-100%);
+	}
 }
 
 #article-content {

@@ -7,18 +7,7 @@ import { Image } from "astro:assets";
 
 import Top1 from "../assets/home/top/1.png";
 
-import Activity1 from "../assets/home/activity/1.png";
-import Activity2 from "../assets/home/activity/2.png";
-import Activity3 from "../assets/home/activity/3.png";
-import Activity4 from "../assets/home/activity/4.png";
-import Activity5 from "../assets/home/activity/5.png";
-import Activity6 from "../assets/home/activity/6.png";
-import Activity7 from "../assets/home/activity/7.png";
-import Activity8 from "../assets/home/activity/8.png";
-import Activity9 from "../assets/home/activity/9.png";
-import Activity10 from "../assets/home/activity/10.png";
-import Activity11 from "../assets/home/activity/11.png";
-import Activity12 from "../assets/home/activity/12.png";
+import ActivitySlide from "../assets/home/activity/slide.png";
 
 const sortedPosts = (await getCollection("blog"))
 	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -132,36 +121,23 @@ const sortedPosts = (await getCollection("blog"))
 				<p class="mb-8">
 					設計、製作、トレーニング…。私たちの活動は多岐にわたります。
 				</p>
+				<div
+					class="mx-auto w-full overflow-hidden h-100 bg-slate-50 relative group"
+				>
+					<div class="flex w-fit">
+						<Image
+							src={ActivitySlide}
+							alt="Slider track"
+							class="h-full max-w-none animate-infinite-scroll"
+						/>
 
-				<div class="image-slider">
-					<ul>
-						<li><Image src={Activity1} alt="Activity 1"></Image></li>
-						<li><Image src={Activity2} alt="Activity 2"></Image></li>
-						<li><Image src={Activity3} alt="Activity 3"></Image></li>
-						<li><Image src={Activity4} alt="Activity 4"></Image></li>
-						<li><Image src={Activity5} alt="Activity 5"></Image></li>
-						<li><Image src={Activity6} alt="Activity 6"></Image></li>
-						<li><Image src={Activity7} alt="Activity 7"></Image></li>
-						<li><Image src={Activity8} alt="Activity 8"></Image></li>
-						<li><Image src={Activity9} alt="Activity 9"></Image></li>
-						<li><Image src={Activity10} alt="Activity 10"></Image></li>
-						<li><Image src={Activity11} alt="Activity 11"></Image></li>
-						<li><Image src={Activity12} alt="Activity 12"></Image></li>
-					</ul>
-					<ul>
-						<li><Image src={Activity1} alt="Activity 1"></Image></li>
-						<li><Image src={Activity2} alt="Activity 2"></Image></li>
-						<li><Image src={Activity3} alt="Activity 3"></Image></li>
-						<li><Image src={Activity4} alt="Activity 4"></Image></li>
-						<li><Image src={Activity5} alt="Activity 5"></Image></li>
-						<li><Image src={Activity6} alt="Activity 6"></Image></li>
-						<li><Image src={Activity7} alt="Activity 7"></Image></li>
-						<li><Image src={Activity8} alt="Activity 8"></Image></li>
-						<li><Image src={Activity9} alt="Activity 9"></Image></li>
-						<li><Image src={Activity10} alt="Activity 10"></Image></li>
-						<li><Image src={Activity11} alt="Activity 11"></Image></li>
-						<li><Image src={Activity12} alt="Activity 12"></Image></li>
-					</ul>
+						<Image
+							src={ActivitySlide}
+							alt=""
+							aria-hidden="true"
+							class="h-full max-w-none animate-infinite-scroll"
+						/>
+					</div>
 				</div>
 
 				<div class="text-center mt-12">
