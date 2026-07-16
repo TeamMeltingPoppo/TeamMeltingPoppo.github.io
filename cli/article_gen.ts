@@ -8,7 +8,7 @@ const rootpath = "./content/blog";
 async function main() {
     const title = await input({ message: "Title:" });
     const description = await input({ message: "Description:" });
-    const slug = await input({ message: "Slug (lowercase, no spaces):" });
+    const slug = new Date().toISOString().split('T')[0];
     const date = new Date().toISOString().split('T')[0];
     const filepath = `${rootpath}/${slug}/index.md`;
     const categories = ['web','embedded','analysis','math','physics','other'];
