@@ -5,12 +5,14 @@ import Layout from "../../layouts/Base.astro";
 import Icon from "../../components/Icon.astro";
 
 export async function getStaticPaths({}) {
-  const all_posts = await getCollection("blog");
+  const publishedPosts = (await getCollection("blog")).filter(
+    (post) => post.data.draft !== true,
+  );
   const tags = [
-    ...new Set(all_posts.map((post) => post.data?.tags).flat()),
+    ...new Set(publishedPosts.map((post) => post.data?.tags).flat()),
   ].filter((tag) => tag);
   return Array.from(tags).map((tag) => {
-    const posts = all_posts.filter((post) => post.data?.tags?.includes(tag));
+    const posts = publishedPosts.filter((post) => post.data?.tags?.includes(tag));
     return {
       params: { tag },
       props: { tag, posts },

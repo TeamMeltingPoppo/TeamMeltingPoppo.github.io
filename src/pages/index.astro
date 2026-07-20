@@ -12,7 +12,10 @@ import Top3 from "../assets/home/top/3.png";
 
 import ActivitySlide from "../assets/home/activity/slide.png";
 
-const sortedPosts = (await getCollection("blog"))
+const publishedPosts = (await getCollection("blog")).filter(
+	(post) => post.data.draft !== true
+);
+const sortedPosts = publishedPosts
 	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 	.slice(0, 3);
 ---

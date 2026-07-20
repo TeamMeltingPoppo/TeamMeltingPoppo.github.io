@@ -16,9 +16,11 @@ const post = Astro.props;
 const { Content } = await render(post);
 
 const prevPost = (await getCollection("blog"))
+	.filter((p) => p.data.draft !== true)
 	.filter((p) => p.data.date < post.data.date)
 	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())[0];
 const nextPost = (await getCollection("blog"))
+	.filter((p) => p.data.draft !== true)
 	.filter((p) => p.data.date > post.data.date)
 	.sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf())[0];
 

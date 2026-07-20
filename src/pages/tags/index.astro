@@ -3,8 +3,10 @@ import { getCollection } from "astro:content";
 import Layout from "../../layouts/Base.astro";
 import Icon from "../../components/Icon.astro";
 
-const all_posts = await getCollection("blog");
-type FrontmatterPost = (typeof all_posts)[number] & {
+const publishedPosts = (await getCollection("blog")).filter(
+	(post) => post.data.draft !== true,
+);
+type FrontmatterPost = (typeof publishedPosts)[number] & {
 	rendered: {
 		metadata: {
 			frontmatter: {
@@ -15,7 +17,7 @@ type FrontmatterPost = (typeof all_posts)[number] & {
 };
 const tags = Array.from(
 	new Set(
-		(all_posts as FrontmatterPost[])
+		(publishedPosts as FrontmatterPost[])
 			.map((post) => post.rendered.metadata.frontmatter.tags ?? [])
 			.flat()
 			.filter(Boolean),
