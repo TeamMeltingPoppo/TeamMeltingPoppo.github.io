@@ -262,7 +262,7 @@ Swingbyは今年は観客として琵琶湖に行くので会場でお渡しで�
 この機会に是非ご購入ください！！<br/>
 <br/>
 
-下購入フォームはこちら↓<br/>
+↓購入フォームはこちら↓<br/>
 https://docs.google.com/forms/d/e/1FAIpQLSfXtpuilbdGhgfupOhlqyNBakVHxNAa-BPpfUIEvOJFv-6e4g/viewform
 <br/>
 <br/>
