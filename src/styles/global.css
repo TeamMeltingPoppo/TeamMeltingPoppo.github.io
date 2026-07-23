@@ -198,6 +198,26 @@ html.dark .lightlogo {
 		@apply rounded-md lg:max-w-[80%] xl:max-w-[75%] mx-auto m-12 xl:mt-12;
 	}
 
+	/* image grid: Tシャツ記事の画像12〜17を3列×2行にする */
+	p:has(> img[alt^="grid-"]) {
+		@apply inline-block align-top w-[calc((100%-1.5rem)/3)] m-0;
+	}
+
+	p:has(> img[alt^="grid-"]) img {
+		@apply w-full max-w-none m-0;
+	}
+
+	/* image grid: Tシャツ記事の画像19〜20を2列×1行にする */
+	p:has(> img[alt^="grid-pair-"]) {
+		@apply w-[calc((100%-0.75rem)/2)];
+	}
+
+	p:has(> img[alt="grid-12"]),
+	p:has(> img[alt="grid-13"]),
+	p:has(> img[alt="grid-14"]) {
+		@apply mb-3;
+	}
+
 	/* blockquote */
 	blockquote {
 		@apply block border-primary border-3 px-4 py-2 w-full h-fit my-8 xl:my-12 text-inactive-foreground rounded-md;
@@ -210,6 +230,20 @@ html.dark .lightlogo {
 	th,
 	td {
 		@apply border border-foreground px-4 py-2 text-left;
+	}
+
+	/* image grid */
+	table:has(img) {
+		@apply border-separate border-spacing-3;
+	}
+
+	table:has(img) thead {
+		@apply hidden;
+	}
+
+	table:has(img) th,
+	table:has(img) td {
+		@apply border-0 p-0;
 	}
 
 	/* hr */
@@ -240,4 +274,5 @@ html.dark .lightlogo {
 	.expressive-code {
 		@apply my-8 xl:my-12 rounded-md;
 	}
+
 }
