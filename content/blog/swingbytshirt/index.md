@@ -223,7 +223,6 @@ AIに鳥コンの提出書類や1～3号機の命名理由、これまでの案�
 <br/>
 
 そして文章<br/>
-<br/>
 
 ### Substance over Rhetoric
 ### Enlightening over Critiquing
