@@ -6,7 +6,7 @@ import Icon from "../../components/Icon.astro";
 
 export async function getStaticPaths({}) {
   const publishedPosts = (await getCollection("blog")).filter(
-    (post) => post.data.draft !== true,
+    (post) => post.data.draft !== true && post.data.date.valueOf() <= Date.now(),
   );
   const tags = [
     ...new Set(publishedPosts.map((post) => post.data?.tags).flat()),

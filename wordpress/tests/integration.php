@@ -93,4 +93,69 @@ $z = new ZipArchive(); $z->open($tmp); $z->addFromString('assets/shell.php', '<?
 check(is_wp_error(import_bundle($tmp)), 'Reject unexpected PHP ZIP entry'); unlink($tmp);
 update_option('swingby_git_auto_publish', true, false);
 check((import_bundle($bundle)['status'] ?? '') === 'published', 'Explicit opt-in enables automatic publication');
+// Exercise the reverse direction and conflict protection.
+$live = get_option('swingby_git_live');
+$liveArticle = array_values(array_filter($live['records'], fn($r) => $r['id'] === $article['id']))[0];
+$upgrade = $liveArticle; unset($upgrade['nativeHash'], $upgrade['nativeContentHash']);
+check(swingby_git_baseline($upgrade) === swingby_git_state_hash(swingby_git_native_state($article['id'])), 'Upgrade recognizes unchanged legacy content');
+$export = swingby_git_export_state()->get_data();
+check(!in_array($article['id'], array_column($export['posts'], 'id'), true), 'Unchanged managed article is not exported');
+wp_update_post(array('ID' => $article['id'], 'post_title' => 'Edited in WordPress'));
+$export = swingby_git_export_state()->get_data();
+$changed = array_values(array_filter($export['posts'], fn($r) => $r['id'] === $article['id']))[0];
+check($changed['data']['title'] === 'Edited in WordPress' && !$changed['contentChanged'], 'Native title change exported without replacing Markdown body');
+check($changed['sourceSha'] === $liveArticle['sourceSha'], 'Source hash exported for conflict detection');
+check(is_wp_error(import_bundle($bundle)), 'Unpulled WordPress edits cannot be overwritten');
+wp_update_post(array('ID' => $article['id'], 'post_title' => $liveArticle['title']));
+check(!is_wp_error(import_bundle($bundle)), 'Sync resumes after resolving editor conflict');
+// Round-trip an acknowledged editor change and a native WordPress-created post.
+function import_test_manifest($bundle, $manifest) {
+    $manifest['release'] = md5(wp_json_encode($manifest));
+    $tmp = tempnam(sys_get_temp_dir(), 'swingby-roundtrip'); copy($bundle, $tmp);
+    $z = new ZipArchive(); $z->open($tmp); $z->addFromString('manifest.json', wp_json_encode($manifest)); $z->close();
+    try { return import_bundle($tmp); } finally { unlink($tmp); }
+}
+$z = new ZipArchive(); $z->open($bundle); $originalManifest = json_decode($z->getFromName('manifest.json'), true); $z->close();
+$editedHtml = '<!-- wp:paragraph --><p>WordPressで編集した本文</p><!-- /wp:paragraph -->';
+wp_update_post(array('ID' => $article['id'], 'post_content' => $editedHtml));
+$changed = array_values(array_filter(swingby_git_export_state()->get_data()['posts'], fn($r) => $r['id'] === $article['id']))[0];
+$roundtrip = $originalManifest;
+foreach ($roundtrip['records'] as &$r) {
+    if ($r['path'] === $article['path']) { $r['wordpressRevision'] = $changed['revision']; $r['wordpressRawContent'] = $editedHtml; }
+} unset($r);
+check(!is_wp_error(import_test_manifest($bundle, $roundtrip)), 'Acknowledged WordPress body change publishes');
+check(get_post($article['id'])->post_content === $editedHtml, 'Gutenberg markup survives round-trip');
+check(!in_array($article['id'], array_column(swingby_git_export_state()->get_data()['posts'], 'id'), true), 'Round-trip does not create a sync loop');
+check(!is_wp_error(import_bundle($bundle)), 'GitHub can edit the synchronized article again');
+$newId = wp_insert_post(array('post_type' => 'post', 'post_status' => 'publish', 'post_title' => 'Native new post', 'post_content' => '<p>Native body</p>'));
+$new = array_values(array_filter(swingby_git_export_state()->get_data()['posts'], fn($r) => $r['id'] === $newId))[0];
+check($new['new'] && $new['sourcePath'] === 'content/blog/wp-' . $newId . '/index.md', 'New editor post has stable GitHub source path');
+$newRecord = $originalManifest['records'][0];
+foreach ($originalManifest['records'] as $r) { if ($r['path'] === $article['path']) { $newRecord = $r; } }
+$newRecord['path'] = $new['path']; $newRecord['sourcePath'] = $new['sourcePath']; $newRecord['wordpressId'] = $newId;
+$newRecord['wordpressRevision'] = $new['revision']; $newRecord['title'] = $new['data']['title']; $newRecord['wordpressRawContent'] = $new['data']['content'];
+$newRecord['date'] = str_replace(' ', 'T', $new['data']['date']) . 'Z'; $newRecord['tags'] = $new['data']['tags']; $newRecord['categories'] = $new['data']['categories'];
+$newManifest = $originalManifest; $newManifest['records'][] = $newRecord;
+check(!is_wp_error(import_test_manifest($bundle, $newManifest)), 'Native WordPress post adopted without duplication');
+check(get_post_meta($newId, '_swingby_path', true) === $new['path'], 'Native WordPress ID retained');
+check(!in_array($newId, array_column(swingby_git_export_state()->get_data()['posts'], 'id'), true), 'New post synchronization settles');
+wp_trash_post($article['id']);
+check(in_array($article['id'], array_column(swingby_git_deleted_posts(), 'id'), true), 'Trash is exported for GitHub archival');
+check(is_wp_error(import_bundle($bundle)), 'Trashed article cannot be resurrected by push');
+wp_untrash_post($article['id']); wp_update_post(array('ID' => $article['id'], 'post_status' => 'publish'));
+check(!in_array($article['id'], array_column(swingby_git_deleted_posts(), 'id'), true), 'Restoring trash removes the archival request before sync');
+wp_delete_post($article['id'], true);
+check(in_array($article['id'], array_column(swingby_git_deleted_posts(), 'id'), true), 'Permanent deletion retains source identity');
+check(is_wp_error(import_bundle($bundle)), 'Permanent deletion cannot be resurrected by push');
+$settings = get_option('swingby_site_settings'); $settings['fields']['hero_heading']['value'] = 'Changed in WordPress';
+update_option('swingby_site_settings', $settings, false);
+$export = swingby_git_export_state()->get_data();
+check($export['settingsChanged'], 'Site editor changes are exported');
+check(swingby_git_settings_valid($settings), 'Valid site editor values accepted');
+$settings['fields']['light_primary']['value'] = 'red;display:none';
+check(!swingby_git_settings_valid($settings), 'Invalid CSS setting rejected');
+wp_set_current_user(0);
+check(rest_do_request('/swingby-git/v1/state')->get_status() === 403, 'Anonymous cannot export editor content');
+wp_set_current_user($admin->ID);
+check(rest_do_request('/swingby-git/v1/state')->get_status() === 200, 'Administrator can use authenticated reverse-sync endpoint');
 echo "Integration tests passed.\n";

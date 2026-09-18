@@ -42,6 +42,13 @@ for (const file of await walk('dist')) {
     const route = '/' + (relative === 'index.html' ? '' : relative.replace(/\/index\.html$/, '/').replace(/\.html$/, '/'));
     const content = body.match(/<article\b[^>]*id="article-content"[^>]*>([\s\S]*?)<\/article>/)?.[1]
       || body.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1] || body;
+    if (data.type === 'post') {
+      const source = path.relative(process.cwd(), path.resolve(data.sourcePath || ''));
+      if (!/^content\/.+\.mdx?$/.test(source) || source.includes('..')) throw Error('Invalid article source path');
+      const sourceBytes = await readFile(source);
+      data.sourcePath = source; data.sourceSha = sha(sourceBytes);
+      if (data.wordpressFormat === 'html') data.wordpressRawContent = sourceBytes.toString().replace(/^---\r?\n[\s\S]*?\r?\n---(?:\r?\n|$)/, '').trim();
+    }
     records.push({path: route, type: 'page', draft: false, ...data,
       head: head.replace(metadata[0], ''), body, content});
   } else if (allowed.test(relative)) {
@@ -55,7 +62,8 @@ for (const file of await walk('dist')) {
 }
 if (!records.some(r => r.path === '/')) throw Error('The home page is missing');
 if (new Set(records.map(r => r.path)).size !== records.length) throw Error('Duplicate routes');
-const core = {schema: 1, site: site.origin, records, assets, notFound};
+const settingsBytes = await readFile('src/data/site-settings.json');
+const core = {schema: 1, site: site.origin, records, assets, notFound, settings: JSON.parse(settingsBytes.toString()), settingsSha: sha(settingsBytes)};
 const manifest = {...core, release: sha(JSON.stringify(core)).slice(0, 32)};
 await writeFile(`${output}/bundle/manifest.json`, JSON.stringify(manifest));
 execFileSync('zip', ['-q', '-r', '../site.zip', '.'], {cwd: `${output}/bundle`});

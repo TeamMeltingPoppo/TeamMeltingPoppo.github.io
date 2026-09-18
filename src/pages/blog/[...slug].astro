@@ -16,11 +16,11 @@ const post = Astro.props;
 const { Content } = await render(post);
 
 const prevPost = (await getCollection("blog"))
-	.filter((p) => p.data.draft !== true)
+	.filter((p) => p.data.draft !== true && p.data.date.valueOf() <= Date.now())
 	.filter((p) => p.data.date < post.data.date)
 	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())[0];
 const nextPost = (await getCollection("blog"))
-	.filter((p) => p.data.draft !== true)
+	.filter((p) => p.data.draft !== true && p.data.date.valueOf() <= Date.now())
 	.filter((p) => p.data.date > post.data.date)
 	.sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf())[0];
 
@@ -31,8 +31,9 @@ import Icon from "../../components/Icon.astro";
 <Layout
 	title=`${post.data.title}`
 	image={post.data.heroImage}
-	description={post.data.description}
-	wordpress={{type: 'post', draft: post.data.draft === true, date: post.data.date.toISOString(), tags: post.data.tags || [], categories: post.data.categories || (post.data.category ? [post.data.category] : [])}}
+    imageURL={post.data.heroImageURL}
+	description={post.data.wordpressExcerpt?.replace(/<[^>]*>/g, '') || post.data.description}
+	wordpress={{type: 'post', wordpressFormat: post.data.wordpressFormat, wordpressExcerpt: post.data.wordpressExcerpt, wordpressFeaturedMedia: post.data.wordpressFeaturedMedia, wordpressStatus: post.data.wordpressStatus, sourcePath: post.filePath, wordpressId: post.data.wordpressId, wordpressRevision: post.data.wordpressRevision, draft: post.data.draft === true, date: post.data.date.toISOString(), tags: post.data.tags || [], categories: post.data.categories || (post.data.category ? [post.data.category] : [])}}
 >
 	<div class="blog-article">
 		<h1 class="article-title">{post.data.title}</h1>

@@ -2,11 +2,12 @@
 /**
  * Plugin Name: Swingby Git Sync
  * Description: Stage Astro builds from GitHub, then publish WordPress posts, pages and design together.
- * Version: 0.2.0
+ * Version: 0.3.0
  * Requires at least: 6.5
  * Requires PHP: 8.1
  */
 if (!defined('ABSPATH')) { exit; }
+require_once __DIR__ . '/bidirectional.php';
 
 function swingby_git_error($message, $status = 400) {
     return new WP_Error('swingby_sync', $message, array('status' => $status));
@@ -15,6 +16,16 @@ function swingby_git_allowed() {
     return is_ssl() && current_user_can('manage_options') && current_user_can('edit_theme_options');
 }
 add_action('rest_api_init', function () {
+    register_rest_route('swingby-git/v1', '/deleted-posts', array(
+        'methods' => 'GET', 'callback' => function () {
+            $response = new WP_REST_Response(array('schema' => 1, 'posts' => swingby_git_deleted_posts()));
+            $response->header('Cache-Control', 'no-store');
+            return $response;
+        },
+        'permission_callback' => function () {
+            return swingby_git_allowed() ? true : swingby_git_error('HTTPS and an administrator account are required.', 403);
+        },
+    ));
     register_rest_route('swingby-git/v1', '/stage', array(
         'methods' => 'POST', 'callback' => 'swingby_git_stage',
         'permission_callback' => function () {
@@ -22,6 +33,40 @@ add_action('rest_api_init', function () {
         },
     ));
 });
+
+// Keep permanent deletion records even after native post metadata has been removed.
+add_action('before_delete_post', function ($id, $post) {
+    $path = get_post_meta($id, '_swingby_path', true);
+    if ($post->post_type !== 'post' || !$path) { return; }
+    $deleted = get_option('swingby_git_deleted', array());
+    $deleted[$path] = array('id' => (int)$id, 'path' => $path, 'type' => 'post', 'status' => 'deleted', 'sourcePath' => get_post_meta($id, '_swingby_source_path', true), 'sourceSha' => get_post_meta($id, '_swingby_source_sha', true));
+    update_option('swingby_git_deleted', $deleted, false);
+}, 10, 2);
+function swingby_git_deleted_posts() {
+    $deleted = get_option('swingby_git_deleted', array());
+    foreach (array('swingby_git_live', 'swingby_git_pending') as $option) {
+        foreach (get_option($option, array())['records'] ?? array() as $r) {
+            if ($r['type'] !== 'post') { continue; }
+            $status = get_post_status($r['id']);
+            if ($status === 'trash' || $status === false) {
+                $deleted[$r['path']] = array('id' => (int)$r['id'], 'path' => $r['path'], 'type' => 'post', 'status' => $status ?: 'deleted', 'sourcePath' => $r['sourcePath'] ?? null, 'sourceSha' => $r['sourceSha'] ?? null);
+            }
+        }
+    }
+    $live = get_option('swingby_git_live', array());
+    $active = $live['sourcePaths'] ?? array_column($live['records'] ?? array(), 'path');
+    foreach ($deleted as &$r) { $r['needsPublish'] = in_array($r['path'], $active, true); } unset($r);
+    return array_values($deleted);
+}
+function swingby_git_reject_deleted($manifest) {
+    $deleted = array_column(swingby_git_deleted_posts(), 'path');
+    foreach ($manifest['records'] as $r) {
+        if ($r['type'] === 'post' && in_array($r['path'], $deleted, true)) {
+            return swingby_git_error('A source post was deleted in WordPress. Run GitHub sync to archive it before publishing.', 409);
+        }
+    }
+    return true;
+}
 
 function swingby_git_safe_asset($name) {
     return is_string($name) && strlen($name) < 240 && !preg_match('~(^|/)\.|[\\\\\x00-\x1f]|^/|:~', $name)
@@ -97,6 +142,17 @@ function swingby_git_import_zip($zip) {
     $m = json_decode($raw, true);
     $valid = swingby_git_validate_manifest($m);
     if (is_wp_error($valid)) { return $valid; }
+    foreach ($m['records'] as $r) {
+        foreach (array('wordpressRawContent', 'wordpressExcerpt') as $field) {
+            if (isset($r[$field]) && (!is_string($r[$field]) || strlen($r[$field]) > 2 * 1024 * 1024)) { return swingby_git_error('Invalid editor content.'); }
+        }
+        foreach (array('wordpressId', 'wordpressFeaturedMedia') as $field) {
+            if (isset($r[$field]) && (!is_int($r[$field]) || $r[$field] < 0)) { return swingby_git_error('Invalid WordPress ID.'); }
+        }
+    }
+    if (isset($m['settings']) && !swingby_git_settings_valid($m['settings'])) { return swingby_git_error('Invalid site settings.'); }
+    $valid = swingby_git_check_conflicts($m);
+    if (is_wp_error($valid)) { return $valid; }
     $total = 0; $entries = array();
     // Inspect every entry before writing anything. Never use extractTo on untrusted ZIPs.
     for ($i = 0; $i < $zip->numFiles; $i++) {
@@ -171,6 +227,12 @@ function swingby_git_import_zip($zip) {
             'meta_key' => '_swingby_key', 'meta_value' => $key, 'numberposts' => 2, 'fields' => 'ids'));
         if (count($found) > 1) { return swingby_git_error('Duplicate managed posts.', 409); }
         $id = $found[0] ?? 0;
+        if (!$id && $r['type'] === 'post' && !empty($r['wordpressId'])) {
+            $id = absint($r['wordpressId']);
+            $existing = get_post_meta($id, '_swingby_key', true);
+            if (get_post_type($id) !== 'post' || ($existing && $existing !== $key)) { return swingby_git_error('WordPress ID does not match the source.', 409); }
+            update_post_meta($id, '_swingby_key', $key); update_post_meta($id, '_swingby_path', $r['path']);
+        }
         if ($id && (get_post_status($id) === 'trash' || get_post_type($id) !== $r['type'])) { return swingby_git_error('A managed post is trashed or changed type. Resolve it before syncing.', 409); }
         if (!$id) {
             $id = wp_insert_post(wp_slash(array('post_type' => $r['type'], 'post_title' => $r['title'], 'post_status' => 'draft',
@@ -179,6 +241,7 @@ function swingby_git_import_zip($zip) {
             if (is_wp_error($id)) { return $id; }
         }
         $r['id'] = $id;
+        if ($r['type'] === 'post') { $r['stagedNativeHash'] = swingby_git_state_hash(swingby_git_native_state($id)); }
         $ids[] = $id;
     }
     unset($r);
@@ -198,27 +261,42 @@ function swingby_git_import_zip($zip) {
 function swingby_git_publish() {
     $m = get_option('swingby_git_pending');
     if (!$m) { return swingby_git_error('No pending build.'); }
+    $valid = swingby_git_check_conflicts($m); if (is_wp_error($valid)) { return $valid; }
     if (get_stylesheet() !== 'swingby-astro') { return swingby_git_error('Activate the Swingby Astro Bridge theme first.'); }
     $prior = get_option('swingby_git_live', array());
-    $backup = array('live' => $prior, 'posts' => array(), 'show_on_front' => get_option('show_on_front'), 'page_on_front' => get_option('page_on_front'));
+    $backup = array('settings' => get_option('swingby_site_settings', null), 'live' => $prior, 'posts' => array(), 'show_on_front' => get_option('show_on_front'), 'page_on_front' => get_option('page_on_front'));
     foreach ($m['records'] as $r) {
         $p = get_post($r['id'], ARRAY_A);
         if (!$p || $p['post_status'] === 'trash') { return swingby_git_error('A staged post was deleted. Stage again.', 409); }
+        if ($r['type'] === 'post' && isset($r['stagedNativeHash']) && $r['stagedNativeHash'] !== swingby_git_state_hash(swingby_git_native_state($r['id']))) { return swingby_git_error('Post changed after staging. Sync again.', 409); }
         $backup['posts'][] = array('ID' => $p['ID'], 'post_title' => $p['post_title'], 'post_content' => $p['post_content'],
-            'post_status' => $p['post_status'], 'post_date' => $p['post_date'], 'post_date_gmt' => $p['post_date_gmt'],
+            'post_excerpt' => $p['post_excerpt'], 'featured_media' => (int)get_post_thumbnail_id($p['ID']), 'post_status' => $p['post_status'], 'post_date' => $p['post_date'], 'post_date_gmt' => $p['post_date_gmt'],
             'tags' => wp_get_post_terms($p['ID'], 'post_tag', array('fields' => 'ids')),
             'categories' => wp_get_post_terms($p['ID'], 'category', array('fields' => 'ids')));
     }
+    $obsolete = array(); $new_paths = array_column($m['records'], 'path');
+    foreach ($prior['records'] ?? array() as $old) {
+        if ($old['type'] !== 'page' || !preg_match('~^/(?:tags/[^/]+|blog/[0-9]+)/$~u', $old['path']) || in_array($old['path'], $new_paths, true)) { continue; }
+        $p = get_post($old['id'], ARRAY_A); if (!$p || $p['post_status'] !== 'publish') { continue; }
+        $obsolete[] = $p['ID'];
+        $backup['posts'][] = array('ID' => $p['ID'], 'post_title' => $p['post_title'], 'post_content' => $p['post_content'], 'post_excerpt' => $p['post_excerpt'],
+            'post_status' => $p['post_status'], 'post_date' => $p['post_date'], 'post_date_gmt' => $p['post_date_gmt'], 'tags' => array(), 'categories' => array());
+    }
     update_option('swingby_git_backup', $backup, false);
+    foreach ($obsolete as $id) { wp_update_post(array('ID' => $id, 'post_status' => 'draft')); }
     foreach ($m['records'] as $r) {
-        $post = array('ID' => $r['id'], 'post_title' => $r['title'], 'post_content' => wp_kses_post($r['content']), 'post_status' => $r['draft'] ? 'draft' : 'publish');
+        $post = array('ID' => $r['id'], 'post_title' => $r['title'], 'post_content' => wp_kses_post($r['wordpressRawContent'] ?? $r['content']), 'post_status' => $r['draft'] ? (($r['wordpressStatus'] ?? '') === 'pending' ? 'pending' : 'draft') : 'publish');
         if (isset($r['date'])) {
             $post['post_date_gmt'] = gmdate('Y-m-d H:i:s', strtotime($r['date']));
             $post['post_date'] = get_date_from_gmt($post['post_date_gmt']);
             if (!$r['draft'] && $post['post_date_gmt'] > gmdate('Y-m-d H:i:s')) { $post['post_status'] = 'future'; }
         }
+        if (isset($r['wordpressExcerpt'])) { $post['post_excerpt'] = wp_kses_post($r['wordpressExcerpt']); }
         $id = wp_update_post(wp_slash($post), true);
         if (is_wp_error($id)) { swingby_git_rollback(); return $id; }
+        if (isset($r['wordpressFeaturedMedia'])) {
+            if ($r['wordpressFeaturedMedia']) { set_post_thumbnail($id, absint($r['wordpressFeaturedMedia'])); } else { delete_post_thumbnail($id); }
+        }
         if ($r['type'] === 'post') {
             foreach (array('tags' => 'post_tag', 'categories' => 'category') as $field => $taxonomy) {
                 $result = wp_set_object_terms($id, $r[$field] ?? array(), $taxonomy);
@@ -227,7 +305,15 @@ function swingby_git_publish() {
         }
         if ($r['path'] === '/') { update_option('show_on_front', 'page'); update_option('page_on_front', $id); }
     }
+    foreach ($m['records'] as &$record) {
+        if ($record['type'] === 'post') { $record['nativeHash'] = swingby_git_state_hash(swingby_git_native_state($record['id']));
+            $record['nativeContentHash'] = hash('sha256', get_post($record['id'])->post_content);
+            update_post_meta($record['id'], '_swingby_source_path', $record['sourcePath'] ?? '');
+            update_post_meta($record['id'], '_swingby_source_sha', $record['sourceSha'] ?? ''); }
+    } unset($record);
+    if (isset($m['settings'])) { update_option('swingby_site_settings', $m['settings'], false); }
     // Keep removed routes: deleting a source file never deletes a WordPress post.
+    $m['sourcePaths'] = array_column($m['records'], 'path');
     $merged = array();
     foreach ($prior['records'] ?? array() as $r) { $merged[$r['path']] = $r; }
     foreach ($m['records'] as $r) { $merged[$r['path']] = $r; }
@@ -240,15 +326,17 @@ function swingby_git_rollback() {
     $backup = get_option('swingby_git_backup');
     if (!$backup) { return swingby_git_error('No rollback available.'); }
     foreach ($backup['posts'] as $p) {
-        $tags = $p['tags']; $categories = $p['categories']; unset($p['tags'], $p['categories']);
+        $tags = $p['tags']; $categories = $p['categories']; $featured = $p['featured_media'] ?? 0; unset($p['tags'], $p['categories'], $p['featured_media']);
         $result = wp_update_post(wp_slash($p), true);
         if (is_wp_error($result)) { return $result; }
+        if ($featured) { set_post_thumbnail($p['ID'], $featured); } else { delete_post_thumbnail($p['ID']); }
         if (get_post_type($p['ID']) === 'post') {
             wp_set_object_terms($p['ID'], array_map('intval', $tags), 'post_tag');
             wp_set_object_terms($p['ID'], array_map('intval', $categories), 'category');
         }
     }
     update_option('swingby_git_live', $backup['live'], false);
+    if (array_key_exists('settings', $backup)) { update_option('swingby_site_settings', $backup['settings'], false); }
     update_option('show_on_front', $backup['show_on_front']); update_option('page_on_front', $backup['page_on_front']);
     delete_option('swingby_git_backup');
     return true;
@@ -348,7 +436,7 @@ function swingby_git_admin() {
     $m = get_option('swingby_git_pending'); $live = get_option('swingby_git_live');
     echo '<div class="wrap"><h1>Swingby Git Sync</h1><p>Astro / TypeScript / Markdown / Tailwind をGitHubで編集します。push後はここで確認して公開してください。</p>';
     echo '<p>公開中: ' . esc_html($live['release'] ?? 'なし') . '</p>';
-    echo '<p>管理画面で本文を変更しても表示用Astroスナップショットには反映されません。変更はGitHub側で行ってください。</p>';
+    echo '<p>投稿の編集はGitHubへ同期され、次回ビルドで反映されます。固定ページ・配色は「Swingby サイト編集」を使ってください。</p>';
     echo '<h2>初回のビルド取り込み</h2><form method="post" enctype="multipart/form-data">'; wp_nonce_field('swingby_git_manage');
     echo '<input type="hidden" name="operation" value="stage"><input type="file" name="bundle" accept=".zip" required><p>site.zip を選択します。通常の更新はGitHub Actionsが送信します。</p>';
     submit_button('ビルドを取り込む', 'secondary'); echo '</form>';

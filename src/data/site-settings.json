@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "fields": {
+    "home_title": {"label": "トップページのタイトル", "type": "text", "value": "Swingby人力飛行機チーム"},
+    "hero_title": {"label": "メインビジュアルのチーム名", "type": "text", "value": "Swingby"},
+    "hero_heading": {"label": "メインビジュアルの見出し", "type": "text", "value": "新たなる地平へ"},
+    "hero_body": {"label": "メインビジュアルの本文", "type": "textarea", "value": "まだ見たことのない景色へ\nかつて抱いた夢の続きを、僕たちの手で\n\n模倣し、理解し、検証する\n辿り着いた答えは誰かの焼き直しでいい\n試行の繰り返しが収束した時\nあらゆる失敗は、成功の過程へと生まれ変わる"},
+    "about_heading": {"label": "チーム紹介の見出し", "type": "text", "value": "私たちについて"},
+    "blog_heading": {"label": "活動記録の見出し", "type": "text", "value": "活動記録"},
+    "blog_intro": {"label": "活動記録の紹介文", "type": "textarea", "value": "日々の活動やイベント情報、大会結果などを発信していきます。"},
+    "join_heading": {"label": "メンバー募集の見出し", "type": "text", "value": "君の情熱が、翼になる。"},
+    "activity_title": {"label": "活動紹介ページの見出し", "type": "text", "value": "活動紹介"},
+    "activity_intro": {"label": "活動紹介ページの本文", "type": "textarea", "value": "Swingbyは8つの班に分かれて機体製作を進めています。\n埼玉県戸田市の本部を拠点に、滋賀と仙台にも支部を設置。全国各地に点在するメンバーが連携し、場所の垣根を越えて活動を展開しています。"},
+    "contact_url": {"label": "お問い合わせフォームのURL", "type": "url", "value": ""},
+    "light_primary": {"label": "ライトモードのメインカラー", "type": "color", "value": "#0c2d89"},
+    "dark_primary": {"label": "ダークモードのメインカラー", "type": "color", "value": "#2979ff"},
+    "article_width": {"label": "記事全体の最大幅（px）", "type": "number", "min": 560, "max": 960, "value": 768},
+    "article_font_size": {"label": "本文の文字サイズ（px）", "type": "number", "min": 14, "max": 20, "value": 16}
+  }
+}

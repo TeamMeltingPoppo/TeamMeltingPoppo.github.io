@@ -2,6 +2,7 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import "../styles/global.css";
+import siteSettings from "../data/site-settings.json";
 import type { ImageMetadata } from "astro";
 import { SITE_TITLE } from "../consts";
 import logo from "../assets/logo.png";
@@ -9,12 +10,17 @@ import logo from "../assets/logo.png";
 interface Props {
 	title: string;
 	image?: ImageMetadata;
+    imageURL?: string;
 	description?: string;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, image, description } = Astro.props;
+const { title, image, imageURL, description } = Astro.props;
+const fields = siteSettings.fields;
+if (![fields.light_primary.value, fields.dark_primary.value].every(value => /^#[0-9a-f]{6}$/i.test(value))) throw new Error("Invalid site color");
+if (!Number.isFinite(fields.article_width.value) || fields.article_width.value < 560 || fields.article_width.value > 960 || !Number.isFinite(fields.article_font_size.value) || fields.article_font_size.value < 14 || fields.article_font_size.value > 20) throw new Error("Invalid article sizing");
+const settingsCSS = `html.light,html:not(.dark){--color-primary:${fields.light_primary.value}}html.dark{--color-primary:${fields.dark_primary.value}}html .blog-article{max-width:${fields.article_width.value}px}html #article-content,html #article-content p,html #article-content li{font-size:${fields.article_font_size.value}px}`;
 ---
 
 <script is:inline>
@@ -54,10 +60,10 @@ const { title, image, description } = Astro.props;
 <meta property="og:locale" content="en_US" />
 <meta property="og:url" content={canonicalURL.toString()} />
 {
-	image? (
+	imageURL || image ? (
 		<meta
 			property="og:image"
-			content={new URL(image.src, Astro.site).toString()}
+			content={imageURL || new URL(image!.src, Astro.site).toString()}
 		/>
 	) : (
 		<meta
@@ -71,10 +77,10 @@ const { title, image, description } = Astro.props;
 <meta name="twitter:title" content={title} />
 <meta name="twitter:url" content={canonicalURL.toString()} />
 {
-	image ? (
+	imageURL || image ? (
 		<meta
 			name="twitter:image"
-			content={new URL(image.src, Astro.site).toString()}
+			content={imageURL || new URL(image!.src, Astro.site).toString()}
 		/>
 	) : (
 		<meta
@@ -97,3 +103,4 @@ const { title, image, description } = Astro.props;
 <title>{title}</title>
 <meta name="title" content={title} />
 {description ? <meta name="description" content={description} /> : null}
+<style is:inline set:html={settingsCSS} />

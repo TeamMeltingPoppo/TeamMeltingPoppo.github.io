@@ -1,4 +1,6 @@
 ---
+import siteSettings from "../../data/site-settings.json";
+const fields = siteSettings.fields;
 import Layout from "../../layouts/Base.astro";
 import { Image } from "astro:assets";
 import Activity from "../../components/Activity.astro";
@@ -23,15 +25,12 @@ import LinkageImage from "../../assets/activity/linkage/image.png";
 ---
 
 <Layout
-    title="活動紹介"
+    title={fields.activity_title.value}
     description="設計、製作、トレーニング…。私たちの活動は多岐にわたります。ここでは、その一端をご紹介します。"
 >
     <section>
-        <h1>活動紹介</h1>
-        <p class="mb-8 p-2">
-            Swingbyは8つの班に分かれて機体製作を進めています。<br/>
-            埼玉県戸田市の本部を拠点に、滋賀と仙台にも支部を設置。全国各地に点在するメンバーが連携し、場所の垣根を越えて活動を展開しています。
-        </p>
+        <h1>{fields.activity_title.value}</h1>
+        <p class="mb-8 p-2 whitespace-pre-line">{fields.activity_intro.value}</p>
         <div
             class="grid grid-cols-2 md:grid-cols-4 w-full space-x-2 space-y-2 items-center justify-center p-2"
         >

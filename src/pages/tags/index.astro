@@ -4,7 +4,7 @@ import Layout from "../../layouts/Base.astro";
 import Icon from "../../components/Icon.astro";
 
 const publishedPosts = (await getCollection("blog")).filter(
-	(post) => post.data.draft !== true,
+	(post) => post.data.draft !== true && post.data.date.valueOf() <= Date.now(),
 );
 type FrontmatterPost = (typeof publishedPosts)[number] & {
 	rendered: {

@@ -9,11 +9,12 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 type Props = {
 	title: string;
 	image?: ImageMetadata;
+    imageURL?: string;
 	description?: string;
 	wordpress?: Record<string, unknown>;
 };
 
-const { title, image, description, wordpress } = Astro.props;
+const { title, image, imageURL, description, wordpress } = Astro.props;
 ---
 
 <!doctype html>
@@ -23,6 +24,7 @@ const { title, image, description, wordpress } = Astro.props;
 		<BaseHead
 			title={`${title} - ${SITE_TITLE}`}
 			image={image}
+            imageURL={imageURL}
 			description={description || SITE_DESCRIPTION}
 		/>
 	</head>
