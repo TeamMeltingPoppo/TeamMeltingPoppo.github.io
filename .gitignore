@@ -1,5 +1,6 @@
 # build output
 dist/
+wordpress-build/
 # generated types
 .astro/
 .pnp.cjs

@@ -32,6 +32,7 @@ import Icon from "../../components/Icon.astro";
 	title=`${post.data.title}`
 	image={post.data.heroImage}
 	description={post.data.description}
+	wordpress={{type: 'post', draft: post.data.draft === true, date: post.data.date.toISOString(), tags: post.data.tags || [], categories: post.data.categories || (post.data.category ? [post.data.category] : [])}}
 >
 	<div class="">
 		<h2 class="font-bold">{post.data.title}</h2>
