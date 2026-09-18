@@ -25,7 +25,8 @@ $bundle = __DIR__ . '/../../wordpress-build/site.zip';
 $result = import_bundle($bundle);
 check(!is_wp_error($result), 'Import original Astro build: ' . (is_wp_error($result) ? $result->get_error_message() : 'ok'));
 $m = get_option('swingby_git_pending');
-check(count($m['records']) === 10, 'Ten WordPress records');
+$z = new ZipArchive(); $z->open($bundle); $expectedCount = count(json_decode($z->getFromName('manifest.json'), true)['records']); $z->close();
+check(count($m['records']) === $expectedCount, 'All exported WordPress records imported');
 $ids = array_column($m['records'], 'id');
 foreach ($ids as $id) { check(get_post_status($id) === 'draft', 'Initial record stays draft: ' . $id); }
 $article = array_values(array_filter($m['records'], fn($r) => $r['path'] === '/blog/blog/swingbytshirt/'))[0];
