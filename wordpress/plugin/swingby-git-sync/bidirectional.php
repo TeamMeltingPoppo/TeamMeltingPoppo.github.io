@@ -99,7 +99,7 @@ add_action('admin_menu', function () {
 function swingby_git_settings_admin() {
     if (!current_user_can('manage_options') || !current_user_can('edit_theme_options')) { return; }
     $settings = get_option('swingby_site_settings', get_option('swingby_git_live', array())['settings'] ?? null);
-    echo '<div class="wrap"><h1>Swingby サイト編集</h1><p>固定ページの文章・リンク・配色・本文サイズを編集できます。保存後、GitHubとの次回同期で反映されます。記事は通常の「投稿」で編集します。</p>';
+    echo '<div class="wrap"><h1>Swingby サイト編集</h1><p>固定ページの文章・リンク・配色・本文サイズを編集できます。即時同期を設定すると、保存直後にGitHubとの同期を開始します。記事は通常の「投稿」で編集します。</p>';
     if (!$settings) { echo '<p>GitHubから新しいビルドを一度取り込むと、編集項目が表示されます。</p></div>'; return; }
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         check_admin_referer('swingby_site_settings'); $next = $settings;
@@ -110,7 +110,7 @@ function swingby_git_settings_admin() {
         } unset($f);
         if (swingby_git_settings_valid($next)) {
             $saved = swingby_git_lock(function () use ($next) { update_option('swingby_site_settings', $next, false); return true; });
-            if (!is_wp_error($saved)) { $settings = $next; echo '<div class="notice notice-success"><p>保存しました。次回のGitHub同期で公開されます。</p></div>'; }
+            if (!is_wp_error($saved)) { $settings = $next; echo '<div class="notice notice-success"><p>保存しました。即時同期を設定済みの場合は、この保存を合図に同期を開始します。</p></div>'; }
             else { echo '<div class="notice notice-error"><p>同期処理中です。少し待って保存し直してください。</p></div>'; }
         } else { echo '<div class="notice notice-error"><p>色・URL・数値の範囲を確認してください。変更は保存していません。</p></div>'; }
     }

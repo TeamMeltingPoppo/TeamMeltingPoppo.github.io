@@ -2,12 +2,13 @@
 /**
  * Plugin Name: Swingby Git Sync
  * Description: Stage Astro builds from GitHub, then publish WordPress posts, pages and design together.
- * Version: 0.3.0
+ * Version: 0.4.0
  * Requires at least: 6.5
  * Requires PHP: 8.1
  */
 if (!defined('ABSPATH')) { exit; }
 require_once __DIR__ . '/bidirectional.php';
+require_once __DIR__ . '/immediate.php';
 
 function swingby_git_error($message, $status = 400) {
     return new WP_Error('swingby_sync', $message, array('status' => $status));
@@ -135,7 +136,8 @@ function swingby_git_stage($request) {
         try { return swingby_git_import_zip($zip); } finally { $zip->close(); }
     });
 }
-function swingby_git_import_zip($zip) {
+function swingby_git_import_zip($zip) { return swingby_git_without_dispatch(fn() => swingby_git_import_zip_inner($zip)); }
+function swingby_git_import_zip_inner($zip) {
     $stat = $zip->statName('manifest.json');
     if (!$stat || $stat['size'] > 16 * 1024 * 1024 || $zip->numFiles > 2400) { return swingby_git_error('Invalid archive size.'); }
     $raw = $zip->getFromName('manifest.json');
@@ -258,7 +260,8 @@ function swingby_git_import_zip($zip) {
     return array('release' => $m['release'], 'count' => count($ids), 'status' => 'staged');
 }
 
-function swingby_git_publish() {
+function swingby_git_publish() { return swingby_git_without_dispatch(fn() => swingby_git_publish_inner()); }
+function swingby_git_publish_inner() {
     $m = get_option('swingby_git_pending');
     if (!$m) { return swingby_git_error('No pending build.'); }
     $valid = swingby_git_check_conflicts($m); if (is_wp_error($valid)) { return $valid; }
@@ -322,7 +325,8 @@ function swingby_git_publish() {
     delete_option('swingby_git_pending');
     return true;
 }
-function swingby_git_rollback() {
+function swingby_git_rollback() { return swingby_git_without_dispatch(fn() => swingby_git_rollback_inner()); }
+function swingby_git_rollback_inner() {
     $backup = get_option('swingby_git_backup');
     if (!$backup) { return swingby_git_error('No rollback available.'); }
     foreach ($backup['posts'] as $p) {

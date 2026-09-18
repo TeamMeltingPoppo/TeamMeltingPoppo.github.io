@@ -167,7 +167,7 @@ GitHub Actionsはサイト出力のみを更新します。プラグイン・テ
 3. GitHub Actionsの **Sync Astro to WordPress → Run workflow** を実行します。新APIがない間はビルド成果物だけを作り、本番への上書きを停止します。
 4. 一度取り込むと「ツール → Swingby サイト編集」に編集項目が表示されます。
 
-- GitHubへのpush時と約15分間隔でWordPressの変更を確認します。GitHubのスケジュール実行には遅延があり、厳密に15分以内を保証するものではありません。急ぐときはRun workflowを使います。
+- 0.4.0で即時同期を設定すると、WordPressの保存直後にGitHub Actionsを起動します。GitHubへのpush時にも確認します。約15分間隔の確認は通信失敗などの回復用に残します。GitHubの実行待ちとビルド時間はかかるため、同期完了時刻は保証しません。
 - 同期対象の記事情報：新規記事、本文、タイトル、日時、タグ、カテゴリー、下書き/承認待ち/予約/公開、抜粋、アイキャッチの参照、削除。
 - WordPressで本文を編集した記事は、HTMLを含むMarkdownとして保存します。ブロックのHTMLとコメントは保持します。本文が変わっていない場合は元のMarkdown本文を維持します。元のMarkdown記法へ完全に逆変換するものではありません。
 - `wordpressFormat: html` の記事は本文がHTMLです。GitHubでMarkdown記法に書き直す場合はこの項目を削除してください。`wordpressId` と `wordpressRevision` は同期用なので通常は変更しません。
@@ -190,3 +190,26 @@ GitHubへ保存できたあと公開に失敗した場合は、次回の同期�
 GitHub Actionsには `contents: write` が必要です。既存のWordPress用Secretsを使用し、追加のGitHubアクセストークンをEC2へ保存する必要はありません。自動commitは同じ実行内でビルド・公開するため、無限のpushループを作りません。
 
 追加検証：`node --import tsx --test wordpress/tests/pull.test.ts`。変更検出・再試行・競合停止・画像を含む保管・パス制限・サイト設定の競合を確認します。
+
+
+## 0.4.0：WordPressの操作直後に同期を開始
+
+`Swingby Git Sync 0.4.0` に更新してから、WordPressの **ツール → Swingby 即時同期** を開きます。
+
+1. 画面の「GitHubで専用キーを作成」を開き、Fine-grained personal access tokenを作ります。
+2. Resource ownerは `TeamMeltingPoppo`、Repository accessは **Only select repositories** で `TeamMeltingPoppo.github.io` だけを選択します。
+3. Repository permissionsは **Actions: Read and write**。MetadataのReadはGitHub側で付与されます。Contentsの書き込み権限は不要です。有効期限は画面で選び、期限後はキーを作り直して再登録します。
+4. 発行したキーをWordPressの同画面へ入力し、**キーを保存して接続テスト** を押します。キーを記事・チャット・リポジトリへ貼らないでください。
+5. 「GitHubが同期開始の要求を受け付けました」が出れば接続できています。Actionsの公開結果まで確認します。組織の承認が必要なキーの場合は承認後に再試行してください。
+
+保存・公開・ゴミ箱へ移動・復元・完全削除・アイキャッチ変更・タグ/カテゴリー変更・専用サイト編集の保存で起動します。入力中の1文字ごと、空の新規編集画面、自動保存のリビジョンでは起動しません。1回の保存で本文・タグ・画像が連続更新されても、そのリクエストが終わってから1回だけ起動します。
+
+GitHubからの取り込み・公開・切り戻しによる更新は再通知しないため、同期ループを防ぎます。短い間隔の連続編集はGitHub側で最新状態にまとめて処理される場合があり、各中間版を個別のcommitに保存する履歴機能ではありません。
+
+キーはWordPressのDBに暗号化して保存し、RESTの同期データやGitHubには含めません。暗号鍵はWordPressの認証用saltから生成するため、saltを変更した場合は再登録が必要です。サーバーで管理する場合は `SWINGBY_GITHUB_DISPATCH_TOKEN` 定数でも指定できます。その場合の解除・変更はサーバー側で行います。
+
+GitHubへの通知が失敗してもWordPressの保存は維持し、未送信状態を保持して再試行します。再試行のWP-Cronはアクセス状況に依存するため、GitHub側の定期確認も回復用として残しています。キーが未設定/期限切れの場合も既存の定期同期は続きます。
+
+検証用WordPressで `SWINGBY_TEST_WP_ROOT=... php wordpress/tests/immediate.php` を実行すると、保存/削除/復元時の起動、同期ループ抑止、認証情報の暗号化、通信失敗時の再試行、同時編集時の通知保持を確認します。GitHubへのHTTPはテスト内で模擬し、実際の通知は送りません。
+
+公式仕様： [GitHub workflow dispatch](https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event)、[WordPressの保存完了フック](https://developer.wordpress.org/reference/hooks/wp_after_insert_post/)。

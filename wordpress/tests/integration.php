@@ -3,6 +3,7 @@
 $root = getenv('SWINGBY_TEST_WP_ROOT');
 if (!$root || !file_exists($root . '/.swingby-disposable-test')) { throw new Exception('Disposable WordPress marker missing'); }
 define('WP_INSTALLING', true);
+define('DISABLE_WP_CRON', true);
 $_SERVER['HTTP_HOST'] = 'melting-poppo.com'; $_SERVER['REQUEST_URI'] = '/'; $_SERVER['HTTPS'] = 'on';
 require $root . '/wp-load.php';
 add_filter('pre_wp_mail', '__return_true');

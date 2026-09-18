@@ -15,6 +15,13 @@ on:
   schedule:
     - cron: '7,22,37,52 * * * *'
   workflow_dispatch:
+    inputs:
+      source:
+        description: 'Trigger source'
+        required: false
+        default: manual
+        type: choice
+        options: [manual, wordpress]
 permissions:
   contents: write
 concurrency:
@@ -55,6 +62,7 @@ jobs:
         run: |
           php -l wordpress/plugin/swingby-git-sync/swingby-git-sync.php
           php -l wordpress/plugin/swingby-git-sync/bidirectional.php
+          php -l wordpress/plugin/swingby-git-sync/immediate.php
           node --import tsx --test wordpress/tests/pull.test.ts
           php -l wordpress/theme/swingby-astro/index.php
           php wordpress/tests/validate.php
