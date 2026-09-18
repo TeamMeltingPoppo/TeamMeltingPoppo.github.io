@@ -149,3 +149,12 @@ GitHub Actionsはサイト出力のみを更新します。プラグイン・テ
 - https://developer.wordpress.org/rest-api/using-the-rest-api/authentication/
 - https://docs.astro.build/en/guides/deploy/
 - https://docs.github.com/en/actions/how-tos/security-for-github-actions/security-guides/using-secrets-in-github-actions
+
+## pushによる自動公開の確認
+
+`main` の対象ファイルを変更してpushしたあと、Actionsの **Sync Astro to WordPress** を開きます。
+最後の **Send to WordPress staging** ステップに `status=published` が出れば、自動公開まで完了しています。
+`status=staged` の場合は取り込みのみ完了で、WordPress側の自動公開設定がオフです。
+
+確認用にこの手順書だけを更新すれば、サイト本文やデザインを変えずに同じ経路をテストできます。
+自動公開をオンにする前から残っている公開待ちビルドは、保存操作だけでは公開されません。
