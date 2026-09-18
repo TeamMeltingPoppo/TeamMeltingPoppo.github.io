@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Swingby Git Sync
  * Description: Stage Astro builds from GitHub, then publish WordPress posts, pages and design together.
- * Version: 0.1.0
+ * Version: 0.2.0
  * Requires at least: 6.5
  * Requires PHP: 8.1
  */
@@ -266,19 +266,60 @@ add_action('parse_request', function ($wp) {
 });
 function swingby_git_permalink($link, $post) {
     if (is_int($post)) { $post = get_post($post); }
+    if (!$post || $post->post_type !== 'page') { return $link; }
     $route = get_post_meta($post->ID, '_swingby_path', true);
     return $route && $post->post_status === 'publish' ? home_url($route) : $link;
 }
-add_filter('post_link', 'swingby_git_permalink', 10, 2);
+// Posts use WordPress's configured date/ID permalink; pages retain their source routes.
 add_filter('page_link', 'swingby_git_permalink', 10, 2);
+function swingby_git_post_url($url) {
+    $parts = wp_parse_url($url);
+    if (!$parts || !isset($parts['path'])) { return $url; }
+    if (isset($parts['host']) && strtolower($parts['host']) !== strtolower(wp_parse_url(home_url('/'), PHP_URL_HOST))) { return $url; }
+    if (isset($parts['scheme']) && !in_array($parts['scheme'], array('http', 'https'), true)) { return $url; }
+    $route = swingby_git_route_key($parts['path']);
+    foreach (get_option('swingby_git_live', array())['records'] ?? array() as $r) {
+        if ($r['type'] !== 'post' || swingby_git_route_key($r['path']) !== $route || get_post_status($r['id']) !== 'publish') { continue; }
+        $link = get_permalink($r['id']);
+        if (isset($parts['query'])) { $link .= (str_contains($link, '?') ? '&' : '?') . $parts['query']; }
+        if (isset($parts['fragment'])) { $link .= '#' . $parts['fragment']; }
+        return $link;
+    }
+    return $url;
+}
+function swingby_git_rewrite_links($html) {
+    // Parse attributes, not arbitrary text/scripts or partial URL prefixes.
+    $tags = new WP_HTML_Tag_Processor($html);
+    while ($tags->next_tag()) {
+        $attribute = $tags->get_tag() === 'META' ? 'content' : 'href';
+        if ($attribute === 'content' && !in_array($tags->get_attribute('property') ?? $tags->get_attribute('name'), array('og:url', 'twitter:url'), true)) { continue; }
+        $url = $tags->get_attribute($attribute);
+        if (is_string($url)) {
+            $rewritten = swingby_git_post_url($url);
+            if ($rewritten !== $url) { $tags->set_attribute($attribute, $rewritten); }
+        }
+    }
+    return $tags->get_updated_html();
+}
+add_filter('the_content', 'swingby_git_rewrite_links', 20);
 function swingby_git_document() {
-    if (is_404()) { return get_option('swingby_git_live', array())['notFound'] ?? null; }
+    if (is_404()) { $r = get_option('swingby_git_live', array())['notFound'] ?? null; if ($r) { $r['head'] = swingby_git_rewrite_links($r['head']); $r['body'] = swingby_git_rewrite_links($r['body']); } return $r; }
     if (!is_singular() || post_password_required()) { return null; }
     foreach (get_option('swingby_git_live', array())['records'] ?? array() as $r) {
-        if ((int) $r['id'] === get_queried_object_id()) { return $r; }
+        if ((int) $r['id'] === get_queried_object_id()) {
+            $r['head'] = swingby_git_rewrite_links($r['head']);
+            $r['body'] = swingby_git_rewrite_links($r['body']);
+            return $r;
+        }
     }
     return null;
 }
+add_action('template_redirect', function () {
+    if (is_preview() || is_feed() || !is_singular('post')) { return; }
+    $requested = home_url(wp_unslash($_SERVER['REQUEST_URI'] ?? '/'));
+    $target = swingby_git_post_url($requested);
+    if ($target !== $requested) { wp_safe_redirect($target, 301); exit; }
+}, 1);
 add_action('template_redirect', function () {
     if (get_option('swingby_git_live') && trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/') === 'rss.xml') {
         wp_safe_redirect(get_feed_link(), 301); exit;

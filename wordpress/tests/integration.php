@@ -25,10 +25,10 @@ $bundle = __DIR__ . '/../../wordpress-build/site.zip';
 $result = import_bundle($bundle);
 check(!is_wp_error($result), 'Import original Astro build: ' . (is_wp_error($result) ? $result->get_error_message() : 'ok'));
 $m = get_option('swingby_git_pending');
-check(count($m['records']) === 8, 'Eight WordPress records');
+check(count($m['records']) === 10, 'Ten WordPress records');
 $ids = array_column($m['records'], 'id');
 foreach ($ids as $id) { check(get_post_status($id) === 'draft', 'Initial record stays draft: ' . $id); }
-$article = array_values(array_filter($m['records'], fn($r) => $r['type'] === 'post'))[0];
+$article = array_values(array_filter($m['records'], fn($r) => $r['path'] === '/blog/blog/swingbytshirt/'))[0];
 check(count($article['categories']) === 1, 'Original categories retained');
 foreach ($m['records'] as $r) {
     check(!str_contains($r['head'] . $r['body'], 'comhttps://'), 'No duplicated asset origins: ' . $r['path']);
@@ -46,7 +46,23 @@ check(!get_option('swingby_git_pending'), 'Pending cleared after publish');
 foreach ($ids as $id) { check(get_post_status($id) === 'publish', 'Record published: ' . $id); }
 check(get_option('show_on_front') === 'page', 'Home page selected');
 check(str_contains(get_option('swingby_git_live')['notFound']['body'], '404'), 'Original 404 design retained');
-check(get_permalink($article['id']) === 'https://melting-poppo.com' . $article['path'], 'Old article path retained');
+update_option('permalink_structure', '/blog/%year%%monthnum%%day%/%post_id%');
+$GLOBALS['wp_rewrite']->init();
+$expected = home_url('/blog/' . get_the_date('Ymd', $article['id']) . '/' . $article['id']);
+check(get_permalink($article['id']) === $expected, 'Native date/ID permalink respected');
+$GLOBALS['wp_rewrite']->flush_rules(false);
+$_SERVER['REQUEST_URI'] = wp_parse_url($expected, PHP_URL_PATH);
+$_SERVER['PHP_SELF'] = '/index.php';
+$native_request = new WP(); $native_request->parse_request();
+check((int)($native_request->query_vars['p'] ?? 0) === $article['id'], 'Native date/ID request resolves through WordPress rewrite rules');
+$_SERVER['REQUEST_URI'] = '/';
+check(swingby_git_post_url($article['path']) === $expected, 'Legacy route redirects to native permalink');
+check(swingby_git_post_url(rtrim($article['path'], '/') . '?test=1#part') === $expected . '?test=1#part', 'Query and fragment retained');
+check(swingby_git_post_url('https://other.example' . $article['path']) === 'https://other.example' . $article['path'], 'External links unchanged');
+check(swingby_git_post_url($article['path'] . 'extra/') === $article['path'] . 'extra/', 'No partial path replacement');
+$rewritten = swingby_git_rewrite_links('<a href="' . $article['path'] . '">Read</a><meta property="og:url" content="https://melting-poppo.com' . $article['path'] . '">');
+check(substr_count($rewritten, $expected) === 2, 'Card links and social metadata use native permalink');
+check(get_permalink((int)get_option('page_on_front')) === home_url('/'), 'Home page route unchanged');
 check(has_term('Apparel', 'category', $article['id']), 'Native WordPress categories');
 check(has_term('Tシャツ', 'post_tag', $article['id']), 'Native WordPress tags');
 wp($article['path']);
@@ -56,6 +72,7 @@ check(($wp->query_vars['p'] ?? 0) === $article['id'], 'Article route resolves to
 $GLOBALS['wp_query'] = new WP_Query($wp->query_vars);
 check(swingby_git_document()['id'] === $article['id'], 'Theme receives the correct live document');
 ob_start(); include __DIR__ . '/../theme/swingby-astro/index.php'; $html = ob_get_clean();
+check(str_contains($html, $expected), 'Rendered article includes native canonical URL');
 check(str_contains($html, 'article-content') && str_contains($html, 'Swingby'), 'Theme renders original article HTML');
 check(!is_wp_error(swingby_git_rollback()), 'Rollback succeeds');
 check(!get_option('swingby_git_live'), 'Rollback restores original live state');

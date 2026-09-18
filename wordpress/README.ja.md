@@ -20,7 +20,7 @@ EC2でNode.jsを常時動かす必要はありません。SSHをGitHub Actions�
 - 画面の忠実な再現には別途保存したAstroスナップショットを使います。WordPressエディターで本文を編集しても、公開表示には反映されません。次回同期時に本文も上書きされます。
 - テーマの色やナビゲーションもGitHubで編集します。WordPressのサイトエディター、メニュー編集、コメント欄や本文フィルターを追加するプラグインは、そのままではAstro表示に反映されません。
 - フォーム等は元サイトのものを維持。現ソースのお問い合わせ `YOUR_GOOGLE_FORM_LINK_HERE` と外部仮画像は未設定のままです。実URLへの置き換えは公開前に行ってください。
-- 元記事URLの `/blog/blog/swingbytshirt/`（blogが2回）は既存Astro出力を維持しています。URL整理はリダイレクト設計と合わせて別途行います。
+- プラグイン0.2.0以降の記事URLはWordPressのパーマリンク設定に従います（例 `/blog/%year%%monthnum%%day%/%post_id%`）。元の `/blog/blog/swingbytshirt/` は301転送し、一覧・本文リンク・canonical・共有用URLも表示時に置換します。記事IDとソースの識別キーは維持します。固定ページのURLは従来どおりです。
 - 新規ページは自動検出。`Base.astro` を使い、`<main>` 内にページ内容を置いてください。
 - `draft: true` の記事は公開操作後も下書きです。未来日時の記事はWordPressでは予約扱いですが、Astroの一覧表示も予約対応にしたい場合は元の絞り込み処理を変更してください。
 - 削除・移動したソースはWordPressから自動削除しません。パス変更は別レコードとして登録します。不要な古い投稿は確認してから管理画面で処理してください。
@@ -141,7 +141,7 @@ GitHub Actionsはサイト出力のみを更新します。プラグイン・テ
 ## 検証
 
 `wordpress/tests/validate.php` は実ビルドのマニフェスト、アセットSHA-256、パストラバーサル、PHPファイルの拒否を確認します。
-`wordpress/tests/integration.php` は使い捨てWordPressで初回下書き、重複防止、画像登録、公開、独自URL、テーマ表示、切り戻し、未来日付の下書き、悪意あるZIP拒否、自動公開オプトインを確認します。
+`wordpress/tests/integration.php` は使い捨てWordPressで初回下書き、重複防止、画像登録、公開、日付/IDパーマリンクと旧URL変換、テーマ表示、切り戻し、未来日付の下書き、悪意あるZIP拒否、自動公開オプトインを確認します。
 本番とは別のWordPress + 公式SQLite Database Integrationで実行しました。EC2のMariaDB構成と実ネットワークでの導入確認は別途必要です。
 
 ## 公式資料

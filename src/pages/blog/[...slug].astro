@@ -34,10 +34,10 @@ import Icon from "../../components/Icon.astro";
 	description={post.data.description}
 	wordpress={{type: 'post', draft: post.data.draft === true, date: post.data.date.toISOString(), tags: post.data.tags || [], categories: post.data.categories || (post.data.category ? [post.data.category] : [])}}
 >
-	<div class="">
-		<h2 class="font-bold">{post.data.title}</h2>
+	<div class="blog-article">
+		<h1 class="article-title">{post.data.title}</h1>
 		<div class="mb-3">
-			<div class="block text-lg text-inactive-foreground my-4">
+			<div class="block text-sm text-inactive-foreground my-4">
 				<Icon name="calendar" size="1em" />
 				<FormattedDate date={post.data.date} />
 				{
@@ -69,7 +69,6 @@ import Icon from "../../components/Icon.astro";
 		<article id="article-content">
 			<Content />
 		</article>
-	</div>
 
 	<hr class="my-6" />
 
@@ -89,4 +88,5 @@ import Icon from "../../components/Icon.astro";
 			)
 		}
 	</nav>
+	</div>
 </Layout>
