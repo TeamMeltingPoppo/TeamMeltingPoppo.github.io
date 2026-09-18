@@ -10,7 +10,7 @@ import expressiveCode from 'astro-expressive-code';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://teamMeltingpoppo.github.io',
+  site: process.env.WORDPRESS_SITE_URL || 'https://teamMeltingpoppo.github.io',
   integrations: [sitemap(), expressiveCode({
     defaultProps: {
       wrap: false,

@@ -1,0 +1,61 @@
+name: Sync Astro to WordPress
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'content/**'
+      - 'public/**'
+      - 'wordpress/**'
+      - 'astro.config.mjs'
+      - 'package.json'
+      - 'yarn.lock'
+      - '.yarnrc.yml'
+      - '.github/workflows/wordpress.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: wordpress-production
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: wordpress-production
+    env:
+      WORDPRESS_SITE_URL: https://melting-poppo.com
+      ASTRO_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+      - name: Install locked dependencies
+        run: npm exec --yes --package=@yarnpkg/cli-dist@4.18.0 -- yarn install --immutable
+      - name: Build the existing Astro website
+        run: node node_modules/astro/astro.js build
+      - name: Package WordPress build, plugin and theme
+        run: node --import tsx wordpress/scripts/package.ts
+      - name: Validate PHP and package
+        run: |
+          php -l wordpress/plugin/swingby-git-sync/swingby-git-sync.php
+          php -l wordpress/theme/swingby-astro/index.php
+          php wordpress/tests/validate.php
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: wordpress-packages
+          path: wordpress-build/*.zip
+          retention-days: 14
+      - name: Send to WordPress staging
+        env:
+          WORDPRESS_USERNAME: ${{ secrets.WORDPRESS_USERNAME }}
+          WORDPRESS_APP_PASSWORD: ${{ secrets.WORDPRESS_APP_PASSWORD }}
+        run: |
+          if [ -z "$WORDPRESS_USERNAME" ] || [ -z "$WORDPRESS_APP_PASSWORD" ]; then
+            echo 'Download wordpress-packages, install the plugin/theme, then configure the two environment secrets and rerun.'
+            exit 1
+          fi
+          node --import tsx wordpress/scripts/send.ts
