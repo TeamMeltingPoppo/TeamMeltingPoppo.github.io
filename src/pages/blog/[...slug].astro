@@ -16,11 +16,11 @@ const post = Astro.props;
 const { Content } = await render(post);
 
 const prevPost = (await getCollection("blog"))
-	.filter((p) => p.data.draft !== true && p.data.date.valueOf() <= Date.now())
+	.filter((p) => p.data.draft !== true)
 	.filter((p) => p.data.date < post.data.date)
 	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())[0];
 const nextPost = (await getCollection("blog"))
-	.filter((p) => p.data.draft !== true && p.data.date.valueOf() <= Date.now())
+	.filter((p) => p.data.draft !== true)
 	.filter((p) => p.data.date > post.data.date)
 	.sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf())[0];
 
@@ -31,14 +31,12 @@ import Icon from "../../components/Icon.astro";
 <Layout
 	title=`${post.data.title}`
 	image={post.data.heroImage}
-    imageURL={post.data.heroImageURL}
-	description={post.data.wordpressExcerpt?.replace(/<[^>]*>/g, '') || post.data.description}
-	wordpress={{type: 'post', wordpressFormat: post.data.wordpressFormat, wordpressExcerpt: post.data.wordpressExcerpt, wordpressFeaturedMedia: post.data.wordpressFeaturedMedia, wordpressStatus: post.data.wordpressStatus, sourcePath: post.filePath, wordpressId: post.data.wordpressId, wordpressRevision: post.data.wordpressRevision, draft: post.data.draft === true, date: post.data.date.toISOString(), tags: post.data.tags || [], categories: post.data.categories || (post.data.category ? [post.data.category] : [])}}
+	description={post.data.description}
 >
-	<div class="blog-article">
-		<h1 class="article-title">{post.data.title}</h1>
+	<div class="">
+		<h2 class="font-bold">{post.data.title}</h2>
 		<div class="mb-3">
-			<div class="block text-sm text-inactive-foreground my-4">
+			<div class="block text-lg text-inactive-foreground my-4">
 				<Icon name="calendar" size="1em" />
 				<FormattedDate date={post.data.date} />
 				{
@@ -70,6 +68,7 @@ import Icon from "../../components/Icon.astro";
 		<article id="article-content">
 			<Content />
 		</article>
+	</div>
 
 	<hr class="my-6" />
 
@@ -89,5 +88,4 @@ import Icon from "../../components/Icon.astro";
 			)
 		}
 	</nav>
-	</div>
 </Layout>

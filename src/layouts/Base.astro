@@ -9,22 +9,18 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 type Props = {
 	title: string;
 	image?: ImageMetadata;
-    imageURL?: string;
 	description?: string;
-	wordpress?: Record<string, unknown>;
 };
 
-const { title, image, imageURL, description, wordpress } = Astro.props;
+const { title, image, description } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="ja">
 	<head>
-		{process.env.WORDPRESS_SITE_URL && <script is:inline type="application/json" id="swingby-wp-data" set:html={JSON.stringify({title, ...wordpress}).replace(/</g, '\\u003c')} />}
 		<BaseHead
 			title={`${title} - ${SITE_TITLE}`}
 			image={image}
-            imageURL={imageURL}
 			description={description || SITE_DESCRIPTION}
 		/>
 	</head>

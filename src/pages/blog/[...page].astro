@@ -6,14 +6,14 @@ import Layout from "../../layouts/Base.astro";
 // getStaticPaths()で動的なルートを設定
 export async function getStaticPaths({ paginate }) {
 	const publishedPosts = (await getCollection("blog")).filter(
-		(post) => post.data.draft !== true && post.data.date.valueOf() <= Date.now(),
+		(post) => post.data.draft !== true,
 	);
 	const sortedPosts = publishedPosts.sort(
 		(a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 	);
 
 	// 並び替えた投稿の配列から、1ページにX記事づつ入るようにページを生成
-	return sortedPosts.length ? paginate(sortedPosts, { pageSize: 10 }) : [{params: {page: undefined}, props: {page: {data: [], currentPage: 1, lastPage: 1, url: {}}}}];
+	return paginate(sortedPosts, { pageSize: 10 });
 }
 
 // paginate()関数を使用すると、各ページのデータはpageプロパティとして渡される
@@ -23,7 +23,6 @@ const { page } = Astro.props;
 <Layout title=`Page ${page.currentPage} of ${page.lastPage}`>
 	<section id="blog" class="container mx-auto">
 		<div class="grid md:grid-cols-2 gap-8">
-            {page.data.length === 0 && <p>公開中の記事はありません。</p>}
 			{
 				page.data.map((post) => (
 					<Card

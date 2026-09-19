@@ -20,7 +20,6 @@
   --color-inactive-background-hover: #2a2a2a;
 }
 
-:root:not(.dark),
 .light {
   --color-primary: #0c2d89;
   --color-secondary: #fb8c00;
@@ -101,24 +100,39 @@ svg {
   transform: translateY(-4px);
 }
 
-/* Both themes share the same logo and button geometry. */
-.brand-logo { display: grid; width: 2.5rem; height: 2.5rem; flex: none; }
-.brand-logo img { grid-area: 1 / 1; width: 100%; height: 100%; object-fit: contain; }
-.theme-toggle { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; }
-.theme-toggle svg { grid-area: 1 / 1; width: 1.25rem; height: 1.25rem; transform: none; }
-html .darklogo, html .lighticon { visibility: hidden; }
-html.dark .darklogo, html.dark .lighticon { visibility: visible; }
-html.dark .lightlogo, html.dark .darkicon { visibility: hidden; }
-#mobile-menu[hidden] { display: none; }
+/* ダークモード切替ボタン */
+html .darkicon {
+  @apply size-[1em];
+}
 
-.blog-article { width: 100%; max-width: 48rem; margin-inline: auto; padding-inline: 1.25rem; overflow-wrap: anywhere; }
-.blog-article .article-title { font-size: clamp(1.6rem, 4vw, 2.25rem); line-height: 1.45; text-align: left; }
-#article-content { font-size: 1rem; line-height: 1.85; }
-#article-content :is(h1, h2) { font-size: 1.5rem; line-height: 1.5; text-align: left; margin-block: 2rem 1rem; }
-#article-content h3 { font-size: 1.25rem; line-height: 1.5; }
-#article-content :is(h4, h5, h6) { font-size: 1.125rem; line-height: 1.5; }
-#article-content table { display: block; max-width: 100%; overflow-x: auto; }
-#article-content pre { max-width: 100%; overflow-x: auto; }
+html .lighticon {
+  @apply size-[0em];
+}
+
+html.dark .darkicon {
+  @apply size-[0em];
+}
+
+html.dark .lighticon {
+  @apply size-[1em];
+}
+
+
+html .darklogo {
+  @apply size-[0em];
+}
+
+html .lightlogo {
+  @apply  size-auto h-10;
+}
+
+html.dark .darklogo {
+  @apply size-auto h-10;
+}
+
+html.dark .lightlogo {
+  @apply size-[0em];
+}
 
 .katex-display {
 	overflow-x: auto;
@@ -145,8 +159,7 @@ html.dark .lightlogo, html.dark .darkicon { visibility: hidden; }
 #article-content {
 	/* paragraphs */
 	p {
-		margin-block: 1em;
-        font-size: 1rem; line-height: 1.85;
+		@apply tracking-wide leading-relaxed 2xl:leading-loose sm:text-[1.125rem] lg:text-[1.25rem];
 	}
 
 	/* list */
@@ -164,8 +177,7 @@ html.dark .lightlogo, html.dark .darkicon { visibility: hidden; }
 
 	ul > li,
 	ol > li {
-		@apply py-1;
-        font-size: 1rem; line-height: 1.85;
+		@apply py-1 tracking-wide leading-relaxed 2xl:leading-loose lg:text-[1.125rem] xl:text-[1.25rem];
 	}
 
 	ul > li > ul {
@@ -183,8 +195,7 @@ html.dark .lightlogo, html.dark .darkicon { visibility: hidden; }
 
 	/* image */
 	img {
-		@apply rounded-md;
-        display: block; max-width: 100%; height: auto; margin: 1.5rem auto;
+		@apply rounded-md lg:max-w-[80%] xl:max-w-[75%] mx-auto m-12 xl:mt-12;
 	}
 
 	/* image grid: Tシャツ記事の画像12〜17を3列×2行にする */
@@ -257,7 +268,7 @@ html.dark .lightlogo, html.dark .darkicon { visibility: hidden; }
 
 	p > code,
 	li > code {
-		@apply text-sm border px-1 py-0.5 rounded-md;
+		@apply text-sm lg:text-base xl:text-lg border px-1 py-0.5 rounded-md;
 	}
 
 	.expressive-code {

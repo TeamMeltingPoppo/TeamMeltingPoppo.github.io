@@ -2,12 +2,9 @@
   "name": "teammeltingpoppo.github.io",
   "type": "module",
   "version": "0.0.1",
-  "packageManager": "yarn@4.18.0",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "wp:package": "node --import tsx wordpress/scripts/package.ts",
-    "wp:send": "node --import tsx wordpress/scripts/send.ts",
     "preview": "astro preview",
     "astro": "astro",
     "article-gen": "tsx ./cli/article_gen.ts",
@@ -28,7 +25,6 @@
   "devDependencies": {
     "@inquirer/prompts": "^7.9.0",
     "@types/node": "^24.8.0",
-    "tsx": "^4.20.6",
-    "yaml": "^2.9.1"
+    "tsx": "^4.20.6"
   }
 }

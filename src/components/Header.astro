@@ -14,8 +14,7 @@ import "tailwindcss";
   <div class="mx-auto px-2 sm:px-6 lg:px-8">
     <div class="relative flex h-16 items-center justify-between">
       <div class="block">
-        <a href="/" class="flex shrink-0 items-center gap-2">
-          <span class="brand-logo" aria-hidden="true">
+        <a href="/" class="flex items-center space-x-2">
           <Image
             src={Logo}
             alt="Swingby Logo"
@@ -26,14 +25,13 @@ import "tailwindcss";
             alt="Swingby Logo"
             class="object-cover w-auto darklogo"
           />
-          </span>
           <span class="font-bold text-xl">Swingby</span>
         </a>
       </div>
 
-      <div class="flex xl:hidden flex-1 justify-center items-center"></div>
+      <div class="flex lg:hidden flex-1 justify-center items-center"></div>
 
-      <div class="block xl:hidden mx-2">
+      <div class="block lg:hidden mx-4">
         <!-- Mobile menu button-->
         <button
           type="button"
@@ -47,7 +45,7 @@ import "tailwindcss";
       </div>
 
       <!-- Desktop navigation -->
-      <div class="hidden xl:ml-6 xl:block">
+      <div class="hidden lg:ml-6 lg:block">
         <div class="flex space-x-4">
           <HeaderLink href="/#home">ホーム</HeaderLink>
           <HeaderLink href="/#about">私たちについて</HeaderLink>
@@ -60,14 +58,14 @@ import "tailwindcss";
         </div>
       </div>
 
-      <div class="block shrink-0 ml-2">
+      <div class="block m-4">
         <ThemeToggle />
       </div>
     </div>
   </div>
 
   <!-- Mobile navigation -->
-  <el-disclosure id="mobile-menu" hidden class="block xl:hidden">
+  <el-disclosure id="mobile-menu" hidden class="block lg:hidden">
     <div class="space-y-1 px-2 pt-2 pb-3">
       <HeaderLink href="/#home">ホーム</HeaderLink>
       <HeaderLink href="/#about">私たちについて</HeaderLink>
