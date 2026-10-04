@@ -23,7 +23,7 @@
     "tailwindcss": "^4.1.14"
   },
   "devDependencies": {
-    "@inquirer/prompts": "^7.9.0",
+    "@inquirer/prompts": "^8.0.0",
     "@types/node": "^24.8.0",
     "tsx": "^4.20.6"
   }
