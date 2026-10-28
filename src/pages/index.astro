@@ -13,6 +13,7 @@ import Top3 from "../assets/home/top/3.png";
 import ActivitySlide from "../assets/home/activity/slide.png";
 import PilgrimDrawing from "../assets/home/aircraft/pilgrim-drawing.png";
 import PilgrimCad from "../assets/home/aircraft/pilgrim-cad.png";
+import SponsorshipTeam from "../assets/home/sponsorship/swingby-team.png";
 
 const publishedPosts = (await getCollection("blog")).filter(
 	(post) => post.data.draft !== true
@@ -359,7 +360,7 @@ const sortedPosts = publishedPosts
 				人力飛行機の開発には、CFRP（炭素繊維強化プラスチック）をはじめとする特殊な材料費、加工費、実験設備費など、多額の資金が必要となります。
 				Swingbyの翼に、貴社・貴団体のロゴを乗せて、一緒に大空の夢を追いかけませんか。
 			</p>
-			<div class="max-w-3xl mx-auto">
+			<div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
 				<div>
 					<h3 class="text-primary">ご支援のメリット</h3>
 					<ul class="list-disc list-inside space-y-2 pl-4">
@@ -373,6 +374,7 @@ const sortedPosts = publishedPosts
 						皆様のご支援が、私たちの翼となり、推進力となります。
 					</p>
 				</div>
+				<Image src={SponsorshipTeam} alt="機体の部品を手にしたSwingbyのメンバー" class="w-full rounded-lg shadow-lg" />
 			</div>
 			<p class="mt-8 text-center">
 				ご支援に関する詳細やご質問は、下記よりお気軽にお問い合わせください。
