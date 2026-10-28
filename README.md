@@ -1,3 +1,32 @@
-# SwingBy' homepage
+# Swingby公式サイト
 
-This web pages is built with hugo & clarity.
+AstroとTailwind CSSで構築し、GitHub Pagesで公開しています。
+この文書のパスはすべてリポジトリルートを基準とします。
+
+## ローカルでの確認
+
+`homepage.code-workspace`を開き、NPM Scriptsから依存パッケージをインストールします。
+既存の`yarn.lock`を使い、不要なロックファイルの更新を含めないでください。
+`dev`でローカル表示、`build`で公開用ファイルの生成、`preview`で生成結果の表示を確認できます。
+
+## ページと記事の編集
+
+トップページは`src/pages/index.astro`、活動紹介は`src/pages/activity/index.astro`、
+共通部品は`src/components/`、表示の共通設定は`src/styles/global.css`にあります。
+画像は`src/assets/`の実ファイルを使い、外部の仮画像サービスには依存しません。
+
+ブログ記事は`content/blog/<記事フォルダ>/index.md`と同じフォルダ内の画像を編集します。
+`article-gen`で下書きを作成できます。同日の記事が既にある場合は上書きせず終了します。
+`article-update`は記事の本文ではなく更新日を変更するスクリプトです。
+`draft: true`の記事は一覧・記事ページ・タグ・RSSの公開対象から除外します。
+`draft: false`にする前に、本文、画像、日付、リンクを確認してください。
+
+## 公開前の確認
+
+ビルドに加えて、トップページ・活動紹介・記事・タグのリンクを確認します。
+広い画面と狭い画面で、メニューの開閉、文字の重なり、横方向のはみ出し、画像を確認します。
+フォームは用途が確認できる正式なURLだけを掲載します。内部の部員登録用フォームを
+一般向けお問い合わせフォームに転用しないでください。
+
+`main`へのpushでGitHub Actionsが公開処理を実行します。
+ローカルでの編集・コミットだけでは公開されません。

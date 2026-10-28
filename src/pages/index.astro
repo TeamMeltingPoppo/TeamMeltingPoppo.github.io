@@ -22,7 +22,7 @@ const sortedPosts = publishedPosts
 
 <Layout
 	title="Swingby人力飛行機チーム"
-	description="学生人力飛行機チームSwingbyの公式サイトへようこそ。私たちは、長距離飛行記録更新を目指し、革新的な設計と情熱で新たな地平を切り拓きます。"
+	description="人力飛行機チームSwingbyの公式サイトへようこそ。私たちは、長距離飛行記録更新を目指し、革新的な設計と情熱で新たな地平を切り拓きます。"
 >
 	<section id="home">
 		<div class="relative w-full h-[600px] md:min-h-screen bg-black/40">
@@ -127,18 +127,18 @@ const sortedPosts = publishedPosts
 				<div
 					class="mx-auto w-full overflow-hidden h-100 bg-slate-50 relative group"
 				>
-					<div class="flex w-fit">
+					<div class="flex w-fit h-full">
 						<Image
 							src={ActivitySlide}
-							alt="Slider track"
-							class="h-full max-w-none animate-infinite-scroll"
+							alt="各班の製作・活動風景"
+							class="h-full w-auto max-w-none shrink-0 animate-infinite-scroll"
 						/>
 
 						<Image
 							src={ActivitySlide}
 							alt=""
 							aria-hidden="true"
-							class="h-full max-w-none animate-infinite-scroll"
+							class="h-full w-auto max-w-none shrink-0 animate-infinite-scroll"
 						/>
 					</div>
 				</div>
@@ -162,10 +162,10 @@ const sortedPosts = publishedPosts
 			</p>
 
 			<div class="text-center mb-8 md:mb-12">
-				<img
-					src="https://placehold.co/800x450/d1d5db/333333?text=機体「Pilgrim」の三面図+or+CG"
-					alt="機体 Pilgrim の三面図またはCG"
-					class="mx-auto rounded-lg shadow-lg"
+				<Image
+					src={Top2}
+					alt="Pilgrimの主翼製作風景"
+					class="mx-auto w-full rounded-lg shadow-lg"
 				/>
 			</div>
 
@@ -369,9 +369,9 @@ const sortedPosts = publishedPosts
 					</p>
 				</div>
 				<div>
-					<img
-						src="https://placehold.co/600x400/e2e8f0/333333?text=スポンサーメリットのイメージ"
-						alt="スポンサーメリットのイメージ"
+					<Image
+						src={Top1}
+						alt="メンバーによる主翼の組み立て作業"
 						class="rounded-lg shadow-lg"
 					/>
 				</div>
@@ -416,20 +416,6 @@ const sortedPosts = publishedPosts
 						class="text-primary hover:underline"
 						>@melting_poppo
 					</a>
-				</p>
-
-				<p>
-					<strong>お問い合わせフォーム:</strong><br />
-					<a
-						href="https://forms.gle/YOUR_GOOGLE_FORM_LINK_HERE"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="text-primary hover:underline"
-						>Googleフォームでのお問い合わせはこちら</a
-					>
-					<span class="text-sm block"
-						>(※Googleフォームのリンクを設定してください)</span
-					>
 				</p>
 			</div>
 		</div>

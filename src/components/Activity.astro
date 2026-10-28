@@ -14,8 +14,8 @@ const {name,image,place}= Astro.props;
 <div>
 <div class="relative w-full">
     <Image src={image} alt=`${name}` class="w-full h-full object-cover"/>
-    <div class="absolute inset-0 flex flex-col items-end justify-center px-12 text-white bg-black/20 text-right">
-        <span class="font-extrabold text-4xl">{name.toUpperCase()}</span>
+    <div class="absolute inset-0 flex flex-col items-end justify-center px-4 sm:px-12 text-white bg-black/20 text-right">
+        <span class="font-extrabold text-2xl sm:text-4xl">{name.toUpperCase()}</span>
     </div>
 </div>
 <div class="p-4">

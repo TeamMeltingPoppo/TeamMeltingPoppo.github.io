@@ -12,7 +12,17 @@ type Props = {
 const { steps } = Astro.props;
 ---
 
-<section class="w-full">
+<div class="w-full">
+    <ol class="space-y-6 border-l-2 border-foreground/50 ml-2 pl-6 py-4 lg:hidden">
+        {steps.map((step) => (
+            <li class:list={["relative", { "text-accent": step.isCurrent }]} aria-current={step.isCurrent ? "step" : undefined}>
+                <span class="absolute -left-[1.875rem] top-1 size-3 rounded-full border-2 border-current bg-background" aria-hidden="true" />
+                <p class="font-bold">{step.date}</p>
+                <p class="whitespace-pre-line mt-1">{step.label}</p>
+            </li>
+        ))}
+    </ol>
+    <div class="hidden lg:block">
     <div class="mx-auto px-10">
         <div class="relative h-100">
             {
@@ -38,12 +48,12 @@ const { steps } = Astro.props;
                         class={`absolute -translate-x-1/2 -translate-y-1/2 text-center ${step.isCurrent ? "text-accent" : "text-foreground"}  hover:scale-125 transition-transform duration-200`}
                         style={`left:${step.x}%; top:${step.y}%;`}
                     >
-                        <div class={`w-4 h-4 bg-background border-2 border-${step.isCurrent ? "accent" : "foreground"} rounded-full mx-auto shadow-sm`} />
+                        <div class:list={["w-4 h-4 bg-background border-2 rounded-full mx-auto shadow-sm", step.isCurrent ? "border-accent" : "border-foreground"]} />
 
-                        <div class="absolute bottom-5 right-5 -translate-x-1/2 whitespace-nowrap font-bold">
+                        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap font-bold">
                             {step.date}
                         </div>
-                        <div class={`absolute top-5 left-5 -translate-x-1 whitespace-pre font-bold text-start text-sm ${step.isCurrent ? "border-accent border-2" : ""}`}>
+                        <div class="absolute top-6 left-1/2 -translate-x-1/2 w-36 whitespace-pre-line font-bold text-center text-sm">
                             {step.label}
                         </div>
                     </div>
@@ -51,4 +61,5 @@ const { steps } = Astro.props;
             }
         </div>
     </div>
-</section>
+    </div>
+</div>

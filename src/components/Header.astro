@@ -5,7 +5,6 @@ import ThemeToggle from "./ThemeToggle.astro";
 import Logo from "../assets/logo.png";
 import LogoDark from "../assets/logo-dark.png";
 import { Image } from "astro:assets";
-import "tailwindcss";
 ---
 
 <nav
@@ -13,7 +12,7 @@ import "tailwindcss";
 >
   <div class="mx-auto px-2 sm:px-6 lg:px-8">
     <div class="relative flex h-16 items-center justify-between">
-      <div class="block">
+      <div class="shrink-0">
         <a href="/" class="flex items-center space-x-2">
           <Image
             src={Logo}
@@ -29,24 +28,26 @@ import "tailwindcss";
         </a>
       </div>
 
-      <div class="flex lg:hidden flex-1 justify-center items-center"></div>
+      <div class="flex min-[90rem]:hidden flex-1 justify-center items-center"></div>
 
-      <div class="block lg:hidden mx-4">
+      <div class="block min-[90rem]:hidden mx-2">
         <!-- Mobile menu button-->
         <button
           type="button"
           onclick="toggleDisclosure('mobile-menu')"
+          aria-controls="mobile-menu"
+          aria-expanded="false"
           class="items-center justify-center rounded-md p-2 focus:outline-2 focus:-outline-offset-1 focus:outline-primary"
         >
-          <span class="sr-only">Open main menu</span>
+          <span class="sr-only">メニューを開閉</span>
           <!-- Heroicon name: outline/bars-3 -->
           <Icon name="menu_open" />
         </button>
       </div>
 
       <!-- Desktop navigation -->
-      <div class="hidden lg:ml-6 lg:block">
-        <div class="flex space-x-4">
+      <div class="hidden min-[90rem]:ml-4 min-[90rem]:block">
+        <div class="flex gap-1">
           <HeaderLink href="/#home">ホーム</HeaderLink>
           <HeaderLink href="/#about">私たちについて</HeaderLink>
           <HeaderLink href="/activity">活動紹介</HeaderLink>
@@ -58,14 +59,14 @@ import "tailwindcss";
         </div>
       </div>
 
-      <div class="block m-4">
+      <div class="block shrink-0 ml-2">
         <ThemeToggle />
       </div>
     </div>
   </div>
 
   <!-- Mobile navigation -->
-  <el-disclosure id="mobile-menu" hidden class="block lg:hidden">
+  <div id="mobile-menu" hidden class="min-[90rem]:hidden max-h-[calc(100dvh-4rem)] overflow-y-auto">
     <div class="space-y-1 px-2 pt-2 pb-3">
       <HeaderLink href="/#home">ホーム</HeaderLink>
       <HeaderLink href="/#about">私たちについて</HeaderLink>
@@ -76,17 +77,21 @@ import "tailwindcss";
       <HeaderLink href="/#sponsorship">スポンサー募集</HeaderLink>
       <HeaderLink href="/#contact">お問い合わせ</HeaderLink>
     </div>
-  </el-disclosure>
+  </div>
 </nav>
 
 <script is:inline>
   function toggleDisclosure(id) {
     const menu = document.getElementById(id);
-    const expanded = menu.hasAttribute("hidden") ? "false" : "true";
-    if (expanded === "false") {
-      menu.removeAttribute("hidden");
-    } else {
-      menu.setAttribute("hidden", "");
-    }
+    const expanded = menu.hidden;
+    menu.hidden = !expanded;
+    document.querySelector('[aria-controls="' + id + '"]')?.setAttribute('aria-expanded', String(expanded));
   }
+
+  document.querySelectorAll('#mobile-menu a').forEach((link) => {
+    link.addEventListener('click', () => {
+      document.getElementById('mobile-menu').hidden = true;
+      document.querySelector('[aria-controls="mobile-menu"]').setAttribute('aria-expanded', 'false');
+    });
+  });
 </script>

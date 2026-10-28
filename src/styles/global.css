@@ -49,10 +49,13 @@
   --color-inactive-background-hover: var(--color-inactive-background-hover);
 }
 
+/* Base element styles must allow component utilities to override them. */
+@layer base {
 html,
 body {
 	scroll-behavior: smooth;
 	scroll-padding-top: 4em;
+	overflow-wrap: anywhere;
 	@apply bg-background text-foreground;
 }
 
@@ -98,6 +101,7 @@ svg {
   fill: currentColor;
   vertical-align: bottom;
   transform: translateY(-4px);
+}
 }
 
 /* ダークモード切替ボタン */
@@ -195,12 +199,12 @@ html.dark .lightlogo {
 
 	/* image */
 	img {
-		@apply rounded-md lg:max-w-[80%] xl:max-w-[75%] mx-auto m-12 xl:mt-12;
+		@apply rounded-md max-w-full h-auto lg:max-w-[80%] xl:max-w-[75%] mx-auto my-8 xl:my-12;
 	}
 
 	/* image grid: Tシャツ記事の画像12〜17を3列×2行にする */
 	p:has(> img[alt^="grid-"]) {
-		@apply inline-block align-top w-[calc((100%-1.5rem)/3)] m-0;
+		@apply inline-block align-top w-full sm:w-[calc((100%-1.5rem)/3)] m-0;
 	}
 
 	p:has(> img[alt^="grid-"]) img {
@@ -209,7 +213,7 @@ html.dark .lightlogo {
 
 	/* image grid: Tシャツ記事の画像19〜20を2列×1行にする */
 	p:has(> img[alt^="grid-pair-"]) {
-		@apply w-[calc((100%-0.75rem)/2)];
+		@apply w-full sm:w-[calc((100%-0.75rem)/2)];
 	}
 
 	p:has(> img[alt="grid-12"]),
@@ -244,6 +248,10 @@ html.dark .lightlogo {
 	table:has(img) th,
 	table:has(img) td {
 		@apply border-0 p-0;
+	}
+
+	table:has(img) img {
+		@apply w-full max-w-none m-0;
 	}
 
 	/* hr */
