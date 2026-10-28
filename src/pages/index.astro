@@ -11,6 +11,8 @@ import Top2 from "../assets/home/top/2.png";
 import Top3 from "../assets/home/top/3.png";
 
 import ActivitySlide from "../assets/home/activity/slide.png";
+import PilgrimDrawing from "../assets/home/aircraft/pilgrim-drawing.png";
+import PilgrimCad from "../assets/home/aircraft/pilgrim-cad.png";
 
 const publishedPosts = (await getCollection("blog")).filter(
 	(post) => post.data.draft !== true
@@ -160,6 +162,17 @@ const sortedPosts = publishedPosts
 			<p class="mb-8">
 				私たちの夢と技術の結晶である初号機「Pilgrim」。新たなる地平を目指す「巡礼者」の名を冠したこの機体は、長距離飛行記録の更新という目的地へ、私たちを導いてくれます。
 			</p>
+
+			<div class="grid md:grid-cols-2 gap-6 mb-8 md:mb-12 items-start">
+				<figure>
+					<Image src={PilgrimDrawing} alt="Pilgrimの上面図と正面図" class="w-full rounded-lg bg-white" />
+					<figcaption class="mt-2 text-sm text-inactive-foreground">Pilgrimの上面図・正面図（2026年の設計資料）</figcaption>
+				</figure>
+				<figure>
+					<Image src={PilgrimCad} alt="Pilgrimの主翼中央部と胴体のCADモデル" class="w-full rounded-lg" />
+					<figcaption class="mt-2 text-sm text-inactive-foreground">PilgrimのCADモデル（2025年の設計資料）</figcaption>
+				</figure>
+			</div>
 
 			<div class="mb-8 md:mb-12 space-y-4 text-sm md:text-base">
 				<h3>“Pilgrim” 機体名に込められた想い</h3>
