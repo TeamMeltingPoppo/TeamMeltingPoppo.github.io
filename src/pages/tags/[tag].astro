@@ -1,26 +1,26 @@
 ---
-import { getCollection } from "astro:content";
+import { publishedPosts as getPublishedPosts } from "../../lib/posts";
+
+import { tagSlug } from "../../lib/tags";
 import Card from "../../components/Card.astro";
 import Layout from "../../layouts/Base.astro";
 import Icon from "../../components/Icon.astro";
 
 export async function getStaticPaths({}) {
-  const publishedPosts = (await getCollection("blog")).filter(
-    (post) => post.data.draft !== true,
-  );
+  const publishedPosts = await getPublishedPosts();
   const tags = [
     ...new Set(publishedPosts.map((post) => post.data?.tags).flat()),
   ].filter((tag) => tag);
   return Array.from(tags).map((tag) => {
     const posts = publishedPosts.filter((post) => post.data?.tags?.includes(tag));
     return {
-      params: { tag },
+      params: { tag: tagSlug(tag) },
       props: { tag, posts },
     };
   });
 }
 
-const { tag } = Astro.params;
+const { tag } = Astro.props;
 const { posts } = Astro.props;
 ---
 

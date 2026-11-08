@@ -1,27 +1,13 @@
 ---
-import { getCollection } from "astro:content";
+import { tagUrl } from "../../lib/tags";
+import { publishedPosts as getPublishedPosts } from "../../lib/posts";
+
 import Layout from "../../layouts/Base.astro";
 import Icon from "../../components/Icon.astro";
 
-const publishedPosts = (await getCollection("blog")).filter(
-	(post) => post.data.draft !== true,
-);
-type FrontmatterPost = (typeof publishedPosts)[number] & {
-	rendered: {
-		metadata: {
-			frontmatter: {
-				tags?: string[];
-			};
-		};
-	};
-};
+const publishedPosts = await getPublishedPosts();
 const tags = Array.from(
-	new Set(
-		(publishedPosts as FrontmatterPost[])
-			.map((post) => post.rendered.metadata.frontmatter.tags ?? [])
-			.flat()
-			.filter(Boolean),
-	),
+  new Set(publishedPosts.flatMap((post) => post.data.tags ?? []).filter(Boolean)),
 );
 ---
 
@@ -33,7 +19,7 @@ const tags = Array.from(
 				tags.sort().map((tag) => {
 					return (
 						<a
-							href={`/tags/${tag}`}
+							href={tagUrl(tag)}
 							class="bg-inactive-background text-inactive-foreground text-xs font-semibold mr-2 px-2.5 py-0.5 rounded hover:text-white hover:bg-primary hover:scale-105 transition-transform"
 						>
 							<span class="text-lg font-bold">

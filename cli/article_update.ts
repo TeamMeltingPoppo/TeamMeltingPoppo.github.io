@@ -3,6 +3,8 @@
 import { readdirSync, existsSync, lstatSync, readFileSync, writeFileSync } from "fs";
 import {select, confirm} from '@inquirer/prompts';
 
+import { updateArticleDate } from "./frontmatter.js";
+
 const rootpath = "./content/blog/";
 
 async function main() {
@@ -21,16 +23,8 @@ async function main() {
         process.exit(0);
     }
     const content = readFileSync(filepath, "utf-8");
-    const idx = content.indexOf('updatedDate: ');
     const date = new Date().toISOString().split('T')[0];
-    let newContent = "";
-    if (idx !== -1) {
-        const endIdx = content.indexOf('\n', idx);
-        newContent = content.slice(0, idx) + `updatedDate: ${date}` + content.slice(endIdx);
-    } else {
-        const insertIdx = content.indexOf('\n---', 4);
-        newContent = content.slice(0, insertIdx) + `\nupdatedDate: ${date}` + content.slice(insertIdx);
-    }
+    const newContent = updateArticleDate(content, date);
     writeFileSync(filepath, newContent);
     console.log(`Updated file: ${filepath}`);
 }

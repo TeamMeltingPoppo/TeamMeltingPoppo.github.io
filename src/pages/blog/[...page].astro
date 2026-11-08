@@ -1,13 +1,12 @@
 ---
-import { getCollection } from "astro:content";
+import { publishedPosts as getPublishedPosts } from "../../lib/posts";
+
 import Card from "../../components/Card.astro";
 import Layout from "../../layouts/Base.astro";
 
 // getStaticPaths()で動的なルートを設定
 export async function getStaticPaths({ paginate }) {
-	const publishedPosts = (await getCollection("blog")).filter(
-		(post) => post.data.draft !== true,
-	);
+	const publishedPosts = await getPublishedPosts();
 	const sortedPosts = publishedPosts.sort(
 		(a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 	);

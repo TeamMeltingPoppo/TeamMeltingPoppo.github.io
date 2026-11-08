@@ -5,9 +5,6 @@ import '../styles/global.css';
 type Props = HTMLAttributes<'a'>;
 
 const { href, class: className, ...props } = Astro.props;
-const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '');
-const subpath = pathname.match(/[^\/]+/g);
-const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
 ---
 
 <a href={href} {...props} class:list={["block whitespace-nowrap rounded-md px-3 py-3 font-medium hover:bg-foreground hover:text-background", className]}>

@@ -3,6 +3,8 @@
 import {existsSync,mkdirSync,writeFileSync} from "fs";
 import { input, select, confirm} from '@inquirer/prompts';
 
+import { createArticle } from "./frontmatter.js";
+
 const rootpath = "./content/blog";
 
 async function main() {
@@ -33,14 +35,10 @@ async function main() {
 
     mkdirSync(`${rootpath}/${slug}`, { recursive: true });
 
-    const content = `---
-title: ${title}
-description: ${description}
-date: ${date}
-category: ${category}
-tags: [${tags.split(',').map(tag => tag.trim().toLowerCase()).join(', ')}]
-draft: true
----`;
+    const content = createArticle({
+        title, description, date, category,
+        tags: tags.split(',').map(tag => tag.trim().toLowerCase()).filter(Boolean),
+    });
 
     writeFileSync(filepath, content);
     console.log(`Created markdown file: ${filepath}`);

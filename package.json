@@ -8,7 +8,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "article-gen": "tsx ./cli/article_gen.ts",
-    "article-update": "tsx ./cli/article_update.ts"
+    "article-update": "tsx ./cli/article_update.ts",
+    "test": "node --import tsx --test tests/*.test.ts"
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.5",
@@ -21,7 +22,8 @@
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
     "sharp": "^0.35.5",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "yaml": "^2.9.1"
   },
   "devDependencies": {
     "@inquirer/prompts": "^8.7.5",
