@@ -203,22 +203,20 @@ html.dark .lightlogo {
 	}
 
 	/* image grid: Tシャツ記事の画像12〜17を3列×2行にする */
-	p:has(> img[alt^="grid-"]) {
+	p:has(> img[title^="layout-"]) {
 		@apply inline-block align-top w-full sm:w-[calc((100%-1.5rem)/3)] m-0;
 	}
 
-	p:has(> img[alt^="grid-"]) img {
+	p:has(> img[title^="layout-"]) img {
 		@apply w-full max-w-none m-0;
 	}
 
 	/* image grid: Tシャツ記事の画像19〜20を2列×1行にする */
-	p:has(> img[alt^="grid-pair-"]) {
+	p:has(> img[title="layout-half"]) {
 		@apply w-full sm:w-[calc((100%-0.75rem)/2)];
 	}
 
-	p:has(> img[alt="grid-12"]),
-	p:has(> img[alt="grid-13"]),
-	p:has(> img[alt="grid-14"]) {
+	p:has(> img[title="layout-third-row"]) {
 		@apply mb-3;
 	}
 

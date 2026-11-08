@@ -1,7 +1,8 @@
 ---
+import { publishedPosts as getPublishedPosts } from "../lib/posts";
 import Layout from "../layouts/Base.astro";
 import Card from "../components/Card.astro";
-import { getCollection } from "astro:content";
+
 import Strategy from "../components/Strategy.astro";
 import Carousel from "../components/Carousel.astro";
 import { Image } from "astro:assets";
@@ -15,9 +16,7 @@ import PilgrimDrawing from "../assets/home/aircraft/pilgrim-drawing.png";
 import PilgrimCad from "../assets/home/aircraft/pilgrim-cad.png";
 import SponsorshipTeam from "../assets/home/sponsorship/swingby-team.png";
 
-const publishedPosts = (await getCollection("blog")).filter(
-	(post) => post.data.draft !== true
-);
+const publishedPosts = await getPublishedPosts();
 const sortedPosts = publishedPosts
 	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 	.slice(0, 3);

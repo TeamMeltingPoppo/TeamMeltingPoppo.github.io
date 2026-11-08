@@ -5171,6 +5171,7 @@ __metadata:
     sharp: "npm:^0.35.5"
     tailwindcss: "npm:^4.3.3"
     tsx: "npm:^4.23.15"
+    yaml: "npm:^2.9.1"
   languageName: unknown
   linkType: soft
 

@@ -5,6 +5,12 @@ import ThemeToggle from "./ThemeToggle.astro";
 import Logo from "../assets/logo.png";
 import LogoDark from "../assets/logo-dark.png";
 import { Image } from "astro:assets";
+const navigation = [
+  ["/#home", "ホーム"], ["/#about", "私たちについて"],
+  ["/activity", "活動紹介"], ["/#aircraft", "機体紹介"],
+  ["/#blog", "活動記録"], ["/#join", "メンバー募集"],
+  ["/#sponsorship", "スポンサー募集"], ["/#contact", "お問い合わせ"],
+];
 ---
 
 <nav
@@ -48,14 +54,7 @@ import { Image } from "astro:assets";
       <!-- Desktop navigation -->
       <div class="hidden min-[90rem]:ml-4 min-[90rem]:block">
         <div class="flex gap-1">
-          <HeaderLink href="/#home">ホーム</HeaderLink>
-          <HeaderLink href="/#about">私たちについて</HeaderLink>
-          <HeaderLink href="/activity">活動紹介</HeaderLink>
-          <HeaderLink href="/#aircraft">機体紹介</HeaderLink>
-          <HeaderLink href="/#blog">活動記録</HeaderLink>
-          <HeaderLink href="/#join">メンバー募集</HeaderLink>
-          <HeaderLink href="/#sponsorship">スポンサー募集</HeaderLink>
-          <HeaderLink href="/#contact">お問い合わせ</HeaderLink>
+          {navigation.map(([href, label]) => <HeaderLink href={href}>{label}</HeaderLink>)}
         </div>
       </div>
 
@@ -68,14 +67,7 @@ import { Image } from "astro:assets";
   <!-- Mobile navigation -->
   <div id="mobile-menu" hidden class="min-[90rem]:hidden max-h-[calc(100dvh-4rem)] overflow-y-auto">
     <div class="space-y-1 px-2 pt-2 pb-3">
-      <HeaderLink href="/#home">ホーム</HeaderLink>
-      <HeaderLink href="/#about">私たちについて</HeaderLink>
-      <HeaderLink href="/activity">活動紹介</HeaderLink>
-      <HeaderLink href="/#aircraft">機体紹介</HeaderLink>
-      <HeaderLink href="/#blog">活動記録</HeaderLink>
-      <HeaderLink href="/#join">メンバー募集</HeaderLink>
-      <HeaderLink href="/#sponsorship">スポンサー募集</HeaderLink>
-      <HeaderLink href="/#contact">お問い合わせ</HeaderLink>
+      {navigation.map(([href, label]) => <HeaderLink href={href}>{label}</HeaderLink>)}
     </div>
   </div>
 </nav>

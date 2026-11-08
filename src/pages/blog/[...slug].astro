@@ -1,10 +1,12 @@
 ---
-import { type CollectionEntry, getCollection, render } from "astro:content";
+import { tagUrl } from "../../lib/tags";
+import { publishedPosts as getPublishedPosts } from "../../lib/posts";
+import { type CollectionEntry, render } from "astro:content";
 import FormattedDate from "../../components/FormattedDate.astro";
 import Layout from "../../layouts/Base.astro";
 
 export async function getStaticPaths() {
-	const posts = (await getCollection("blog")).filter((post) => post.data.draft !== true);
+	const posts = await getPublishedPosts();
 	return posts.map((post) => ({
 		params: { slug: post.id },
 		props: post,
@@ -15,12 +17,10 @@ type Props = CollectionEntry<"blog">;
 const post = Astro.props;
 const { Content } = await render(post);
 
-const prevPost = (await getCollection("blog"))
-	.filter((p) => p.data.draft !== true)
+const prevPost = (await getPublishedPosts())
 	.filter((p) => p.data.date < post.data.date)
 	.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())[0];
-const nextPost = (await getCollection("blog"))
-	.filter((p) => p.data.draft !== true)
+const nextPost = (await getPublishedPosts())
 	.filter((p) => p.data.date > post.data.date)
 	.sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf())[0];
 
@@ -53,7 +53,7 @@ import Icon from "../../components/Icon.astro";
 				{
 					post.data.tags?.map((tag) => (
 						<a
-							href={`/tags/${tag}`}
+							href={tagUrl(tag)}
 							class="bg-inactive-background text-inactive-foreground text-md font-semibold mr-2 px-2.5 py-0.5 rounded hover:text-white hover:bg-primary hover:scale-105 transition-transform"
 						>
 							<Icon name="tag" size="1em" />
