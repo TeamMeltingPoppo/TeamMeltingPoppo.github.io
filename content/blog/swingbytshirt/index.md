@@ -257,13 +257,7 @@ AIに鳥コンの提出書類や1～3号機の命名理由、これまでの案�
 <br/>
 <br/>
 
-このTシャツをきっかけにSwingbyの活動に興味を持ってくれたら嬉しいです<br/>
-Swingbyは今年は観客として琵琶湖に行くので会場でお渡しできます！<br/>
-この機会に是非ご購入ください！！<br/>
-<br/>
-
-↓購入フォームはこちら↓<br/>
-https://docs.google.com/forms/d/e/1FAIpQLSfXtpuilbdGhgfupOhlqyNBakVHxNAa-BPpfUIEvOJFv-6e4g/viewform
+この記事は、当時のTシャツ制作と販売の記録です。掲載していた購入フォームは受付を終了しています。現在の販売状況は [Swingby Store](https://store.melting-poppo.com/) の商品一覧をご確認ください。
 <br/>
 <br/>
 
